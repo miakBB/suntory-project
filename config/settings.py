@@ -29,18 +29,21 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "default-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-
+#アプリケーション達 上記6個はデフォルトで設定されている
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.admin', #デフォルトの管理画面
+    'django.contrib.auth', #デフォルトのログイン等
+    'django.contrib.contenttypes', #デフォルトのコンテンツタイプ
+    'django.contrib.sessions', #デフォルトのセッション
+    'django.contrib.messages', #デフォルトのメッセージ
+    'django.contrib.staticfiles', #デフォルトの静的ファイル
+    'users', #ユーザー登録、ログイン、ユーザー更新
+    'dashboard',#ダッシュボード　サマリ画面
+    'records',#飲料の記録登録、閲覧
 ]
 
 MIDDLEWARE = [
@@ -58,8 +61,8 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [BASE_DIR / 'templates'], #テンプレートディレクトリの指定
+        'APP_DIRS': True, #アプリケーションのテンプレートディレクトリを検索する
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -84,22 +87,25 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "users.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
+#パスワードの禁止事項(現在デフォルト)
+
+AUTH_PASSWORD_VALIDATORS = [ 
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', #ユーザーと似たパスワード禁止
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', #最小文字数指定
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', #一般的なパスワード禁止
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', #数字のみのパスワード禁止
     },
 ]
 
@@ -107,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -119,7 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/" #静的ファイルのディレクトリ指定(プロジェクト直下)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

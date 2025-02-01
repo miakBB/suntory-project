@@ -1,0 +1,72 @@
+[
+    {
+        "model": "records.drinkcategory",
+        "pk": 1,
+        "fields": {
+            "name": "コーヒー飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 2,
+        "fields": {
+            "name": "お茶飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 3,
+        "fields": {
+            "name": "紅茶飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 4,
+        "fields": {
+            "name": "炭酸飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 5,
+        "fields": {
+            "name": "果汁入飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 6,
+        "fields": {
+            "name": "ミネラルウォーター"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 7,
+        "fields": {
+            "name": "スポーツ飲料他"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 8,
+        "fields": {
+            "name": "野菜系飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 9,
+        "fields": {
+            "name": "乳性飲料"
+        }
+    },
+    {
+        "model": "records.drinkcategory",
+        "pk": 10,
+        "fields": {
+            "name": "その他"
+        }
+    }
+]
