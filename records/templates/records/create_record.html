@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>飲料記録の登録</h2>
+
+<form method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 300px;">
+    {% csrf_token %}
+
+    <!-- カテゴリー選択 -->
+    <div>
+        <label for="id_category">カテゴリーを選択:</label>
+        <select id="id_category" name="category" style="width: 100%;">
+            <option value="">カテゴリーを選択</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 飲み物選択 -->
+    <div>
+        <label for="id_drink">飲み物を選択:</label>
+        <select id="id_drink" name="drink" style="width: 100%;">
+            <option value="">飲み物を選択</option>
+        </select>
+    </div>
+
+    <input type="hidden" name="quantity" id="id_quantity">  <!-- 自動セット用 -->
+
+    <!-- 飲んだ日選択 -->
+    <div>
+        <label for="id_consumed_at">飲んだ日:</label>
+        <select name="consumed_at" id="id_consumed_at" style="width: 100%;">
+            {% for date in past_week_dates %}
+            <option value="{{ date }}" {% if forloop.first %}selected{% endif %}>{{ date }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 登録ボタン -->
+    <button type="submit" style="width: 100%; padding: 10px; background-color: #337ab7; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        登録
+    </button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const categorySelect = document.getElementById("id_category");
+    const drinkSelect = document.getElementById("id_drink");
+    const quantityField = document.getElementById("id_quantity");
+
+    //jsonで送る形にしていないので,問題が表示されているが、実行環境では問題なく動作する...はず.
+    const drinksData = [
+        {% for drink in drinks %}
+        {
+            "id": {{ drink.id }},
+            "name": "{{ drink.name|escapejs }}",
+            "category": {{ drink.category.id }},
+            "volume": {{ drink.volume }}
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    categorySelect.addEventListener("change", function() {
+        const categoryId = parseInt(categorySelect.value, 10);
+        drinkSelect.innerHTML = "<option value=''>飲み物を選択</option>";
+
+        if (!isNaN(categoryId)) {
+            drinksData.filter(drink => drink.category === categoryId).forEach(drink => {
+                const option = document.createElement("option");
+                option.value = drink.id;
+                option.textContent = drink.name;
+                option.dataset.volume = drink.volume;
+                drinkSelect.appendChild(option);
+            });
+        }
+    });
+
+    drinkSelect.addEventListener("change", function() {
+        const selectedOption = drinkSelect.options[drinkSelect.selectedIndex];
+        quantityField.value = selectedOption.dataset.volume || "";
+    });
+});
+</script>
+
+{% endblock %}
