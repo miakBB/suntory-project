@@ -1,0 +1,7 @@
+<h2>ログイン</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">ログイン</button>
+    <button onclick="location.href='http://127.0.0.1:8000/users/register'">新規登録</button>
+</form>
