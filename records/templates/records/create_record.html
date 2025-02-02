@@ -2,26 +2,44 @@
 {% block content %}
 <h2>飲料記録の登録</h2>
 
-<form method="post">
+<form method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 300px;">
     {% csrf_token %}
-    <label for="id_category">カテゴリーを選択:</label>
-    <select id="id_category" name="category">
-        <option value="">カテゴリーを選択</option>
-        {% for category in categories %}
-        <option value="{{ category.id }}">{{ category.name }}</option>
-        {% endfor %}
-    </select>
 
-    <label for="id_drink">飲み物を選択:</label>
-    <select id="id_drink" name="drink">
-        <option value="">飲み物を選択</option>
-    </select>
+    <!-- カテゴリー選択 -->
+    <div>
+        <label for="id_category">カテゴリーを選択:</label>
+        <select id="id_category" name="category" style="width: 100%;">
+            <option value="">カテゴリーを選択</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 飲み物選択 -->
+    <div>
+        <label for="id_drink">飲み物を選択:</label>
+        <select id="id_drink" name="drink" style="width: 100%;">
+            <option value="">飲み物を選択</option>
+        </select>
+    </div>
 
     <input type="hidden" name="quantity" id="id_quantity">  <!-- 自動セット用 -->
-    <label for="id_consumed_at">飲んだ日:</label>
-    {{ form.consumed_at }}
 
-    <button type="submit">登録</button>
+    <!-- 飲んだ日選択 -->
+    <div>
+        <label for="id_consumed_at">飲んだ日:</label>
+        <select name="consumed_at" id="id_consumed_at" style="width: 100%;">
+            {% for date in past_week_dates %}
+            <option value="{{ date }}" {% if forloop.first %}selected{% endif %}>{{ date }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- 登録ボタン -->
+    <button type="submit" style="width: 100%; padding: 10px; background-color: #337ab7; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        登録
+    </button>
 </form>
 
 <script>
@@ -30,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const drinkSelect = document.getElementById("id_drink");
     const quantityField = document.getElementById("id_quantity");
 
-    // Django のテンプレートを JavaScript の JSON として正しく整形
+    //jsonで送る形にしていないので,問題が表示されているが、実行環境では問題なく動作する...はず.
     const drinksData = [
         {% for drink in drinks %}
         {
@@ -42,7 +60,6 @@ document.addEventListener("DOMContentLoaded", function() {
         {% endfor %}
     ];
 
-    // カテゴリー選択時に飲み物リストを更新
     categorySelect.addEventListener("change", function() {
         const categoryId = parseInt(categorySelect.value, 10);
         drinkSelect.innerHTML = "<option value=''>飲み物を選択</option>";
@@ -58,7 +75,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // 飲み物選択時に quantity を自動セット
     drinkSelect.addEventListener("change", function() {
         const selectedOption = drinkSelect.options[drinkSelect.selectedIndex];
         quantityField.value = selectedOption.dataset.volume || "";

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- まだcssファイルやjsファイルと一緒くた のちに分離させていく予定 -->
+<h2>過去 1 週間の記録</h2>
+
+<!-- グラフ -->
+<canvas id="weeklyChart" width="400" height="200"></canvas>
+
+<!-- 詳細情報 -->
+<h3 id="detailTitle">詳細情報</h3>
+<table id="detailTable" border="1" style="display: none;">
+    <thead>
+        <tr id="detailHeaderRow">
+            <th>飲み物</th>
+            <th>量(ml)</th>
+            <th>カフェイン(mg)</th>
+            <th>糖分(g)</th>
+            <th>塩分(g)</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<p id="noDataMessage" style="color: red; display: none;">データがありません</p>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("/records/api/weekly/")
+        .then(response => response.json())
+        .then(data => {
+            let originalDates = data.summary.map(entry => entry.date).reverse(); // `YYYY-MM-DD`
+            let labels = originalDates.map(date => date.slice(5));  // `MM-DD` 表示用
+            let quantities = data.summary.map(entry => entry.total_quantity).reverse();  // 逆順
+            const details = data.details;
+            let selectedDate = originalDates[6];  // 最新日
+
+            const ctx = document.getElementById("weeklyChart").getContext("2d");
+            //グラフの描画
+            const chart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "摂取水分量(ml)",
+                        data: quantities,
+                        backgroundColor: "rgba(54, 162, 235, 0.5)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { display: false },  // 縦軸のメモリを非表示
+                        x: { ticks: { color: "black" } }  // 横軸の文字色を明示
+                    },
+                    onClick: function(event) {
+                        const elements = chart.getElementsAtEventForMode(event, 'nearest', { intersect: false }, false);
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                    
+                            if (index !== undefined && originalDates[index]) {
+                                selectedDate = originalDates[index];
+                                updateDetailTable(selectedDate);
+                                //console.log("詳細テーブルを更新しました");
+                            } else {
+                                //console.log("選択されたインデックスが無効または日付が取得できない");
+                            }
+                        } else {
+                            //console.log("クリックしたけど要素が取得できなかった");
+                        }
+                    }                    
+                    
+                }
+            });
+
+            updateDetailTable(selectedDate);
+
+            //詳細情報の更新
+            function updateDetailTable(date) {
+                const tableBody = document.querySelector("#detailTable tbody");
+                const detailTable = document.getElementById("detailTable");
+                const noDataMessage = document.getElementById("noDataMessage");
+
+                tableBody.innerHTML = "";
+
+                if (details[date] && details[date].length > 0) {
+                    details[date].forEach(entry => {
+                        const row = `<tr>
+                            <td>${entry.drink_name}</td>
+                            <td>${entry.quantity}</td>
+                            <td>${entry.caffeine}</td>
+                            <td>${entry.sugars}</td>
+                            <td>${entry.salt}</td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                    detailTable.style.display = "table";  // データがある場合はテーブルを表示
+                    noDataMessage.style.display = "none";  // 「データがありません」を非表示
+                } else {
+                    detailTable.style.display = "none";  // テーブルを非表示
+                    noDataMessage.style.display = "block"; // 「データがありません」を表示
+                }
+
+                document.getElementById("detailTitle").innerText = `詳細情報 (${date})`;
+            }
+        });
+});
+</script>
+
+{% endblock %}

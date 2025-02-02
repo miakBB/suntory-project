@@ -4,7 +4,7 @@
         "model": "records.drink",
         "fields": {
             "category": 1,
-            "name": "ボス デミタス 微糖 185g缶",
+            "name": "ボス デミタス 微糖",
             "volume": 185,
             "unit": 100,
             "kcal": 30,
@@ -18,7 +18,7 @@
         "model": "records.drink",
         "fields": {
             "category": 1,
-            "name": "プレミアムボス ブラック 390gボトル缶",
+            "name": "プレミアムボス ブラック",
             "volume": 390,
             "unit": 100,
             "kcal": 0,
@@ -32,7 +32,7 @@
         "model": "records.drink",
         "fields": {
             "category": 1,
-            "name": "ボス とろけるカフェオレ 500mlペット",
+            "name": "ボス とろけるカフェオレ",
             "volume": 500,
             "unit": 100,
             "kcal": 48,
@@ -60,7 +60,7 @@
         "model": "records.drink",
         "fields": {
             "category": 1,
-            "name": "クラフトボス 微糖 500mlペット",
+            "name": "クラフトボス 微糖",
             "volume": 500,
             "unit": 100,
             "kcal": 19,
@@ -74,7 +74,7 @@
         "model": "records.drink",
         "fields": {
             "category": 2,
-            "name": "緑茶 伊右衛門 600mlペット",
+            "name": "緑茶 伊右衛門",
             "volume": 600,
             "unit": 100,
             "kcal": 0,
@@ -88,7 +88,7 @@
         "model": "records.drink",
         "fields": {
             "category": 2,
-            "name": "伊右衛門 特茶a TOKUCHA（特定保健用食品）500mlペット",
+            "name": "伊右衛門 特茶a TOKUCHA",
             "volume": 500,
             "unit": 100,
             "kcal": 0,
@@ -102,7 +102,7 @@
         "model": "records.drink",
         "fields": {
             "category": 2,
-            "name": "緑茶 伊右衛門 京都ブレンド 600mlペット",
+            "name": "緑茶 伊右衛門 京都ブレンド",
             "volume": 600,
             "unit": 100,
             "kcal": 0,
@@ -116,7 +116,7 @@
         "model": "records.drink",
         "fields": {
             "category": 2,
-            "name": "GREEN DA･KA･RA やさしい麦茶 680mlペット",
+            "name": "GREEN DA･KA･RA やさしい麦茶",
             "volume": 680,
             "unit": 100,
             "kcal": 0,
@@ -130,7 +130,7 @@
         "model": "records.drink",
         "fields": {
             "category": 2,
-            "name": "緑茶 伊右衛門 BLACK 600mlペット",
+            "name": "緑茶 伊右衛門 BLACK",
             "volume": 600,
             "unit": 100,
             "kcal": 0,
@@ -144,7 +144,7 @@
         "model": "records.drink",
         "fields": {
             "category": 3,
-            "name": "クラフトボス フルーツティー秋冬 500mlペット",
+            "name": "クラフトボス フルーツティー秋冬",
             "volume": 500,
             "unit": 100,
             "kcal": 28,
@@ -158,7 +158,7 @@
         "model": "records.drink",
         "fields": {
             "category": 3,
-            "name": "クラフトボス ミルクティー 600mlペット",
+            "name": "クラフトボス ミルクティー",
             "volume": 600,
             "unit": 100,
             "kcal": 33,
@@ -172,7 +172,7 @@
         "model": "records.drink",
         "fields": {
             "category": 3,
-            "name": "リプトン 白の贅沢 280mlペット",
+            "name": "リプトン 白の贅沢",
             "volume": 280,
             "unit": 100,
             "kcal": 37,
@@ -186,7 +186,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "ペプシコーラ 490mlペット",
+            "name": "ペプシコーラ",
             "volume": 490,
             "unit": 100,
             "kcal": 48,
@@ -200,7 +200,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "ペプシ＜生＞BIG COLA 600mlペット",
+            "name": "ペプシ＜生＞BIG COLA",
             "volume": 600,
             "unit": 100,
             "kcal": 46,
@@ -214,7 +214,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "C.C.レモン 500mlペット",
+            "name": "C.C.レモン",
             "volume": 500,
             "unit": 100,
             "kcal": 40,
@@ -228,7 +228,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "POP メロンソーダ 600mlペット",
+            "name": "POP メロンソーダ",
             "volume": 600,
             "unit": 100,
             "kcal": 48,
@@ -242,7 +242,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "デカビタＣ 210ml瓶",
+            "name": "デカビタＣ",
             "volume": 210,
             "unit": 100,
             "kcal": 54,
@@ -256,7 +256,7 @@
         "model": "records.drink",
         "fields": {
             "category": 5,
-            "name": "サントリー天然水 きりっと果実 オレンジ＆マンゴー 600mlペット",
+            "name": "サントリー天然水 きりっと果実 オレンジ＆マンゴー",
             "volume": 600,
             "unit": 100,
             "kcal": 31,
@@ -270,7 +270,7 @@
         "model": "records.drink",
         "fields": {
             "category": 5,
-            "name": "伊右衛門 京都レモネード 525mlペット",
+            "name": "伊右衛門 京都レモネード",
             "volume": 525,
             "unit": 100,
             "kcal": 40,
@@ -284,7 +284,7 @@
         "model": "records.drink",
         "fields": {
             "category": 5,
-            "name": "なっちゃん りんご 425mlペット",
+            "name": "なっちゃん りんご",
             "volume": 425,
             "unit": 100,
             "kcal": 47,
@@ -298,7 +298,7 @@
         "model": "records.drink",
         "fields": {
             "category": 6,
-            "name": "サントリー天然水 550mlペット",
+            "name": "サントリー天然水",
             "volume": 550,
             "unit": 100,
             "kcal": 0,
@@ -312,7 +312,7 @@
         "model": "records.drink",
         "fields": {
             "category": 6,
-            "name": "サントリー天然水スパークリング レモン 500mlペット",
+            "name": "サントリー天然水スパークリング レモン",
             "volume": 500,
             "unit": 100,
             "kcal": 0,
@@ -326,7 +326,7 @@
         "model": "records.drink",
         "fields": {
             "category": 6,
-            "name": "サントリー天然水 特製レモンスカッシュ 500mlペット",
+            "name": "サントリー天然水 特製レモンスカッシュ",
             "volume": 500,
             "unit": 100,
             "kcal": 35,
@@ -340,7 +340,7 @@
         "model": "records.drink",
         "fields": {
             "category": 7,
-            "name": "GREEN DA･KA･RA 600mlペット",
+            "name": "GREEN DA･KA･RA",
             "volume": 600,
             "unit": 100,
             "kcal": 18,
@@ -354,7 +354,7 @@
         "model": "records.drink",
         "fields": {
             "category": 7,
-            "name": "ビタミンウォーター 500mlペット",
+            "name": "ビタミンウォーター",
             "volume": 500,
             "unit": 100,
             "kcal": 16,
@@ -368,7 +368,7 @@
         "model": "records.drink",
         "fields": {
             "category": 7,
-            "name": "ダカラ Wビタミン 500mlペット",
+            "name": "ダカラ Wビタミン",
             "volume": 500,
             "unit": 100,
             "kcal": 18,
@@ -382,7 +382,7 @@
         "model": "records.drink",
         "fields": {
             "category": 8,
-            "name": "GREEN DA･KA･RA すっきりしたトマト 350g缶",
+            "name": "GREEN DA･KA･RA すっきりしたトマト",
             "volume": 350,
             "unit": 100,
             "kcal": 23,
@@ -396,7 +396,7 @@
         "model": "records.drink",
         "fields": {
             "category": 9,
-            "name": "ビックル500 500mlペット",
+            "name": "ビックル500",
             "volume": 500,
             "unit": 100,
             "kcal": 45,
@@ -410,7 +410,7 @@
         "model": "records.drink",
         "fields": {
             "category": 9,
-            "name": "いちごミルク 190g缶",
+            "name": "いちごミルク",
             "volume": 190,
             "unit": 100,
             "kcal": 63,
@@ -424,7 +424,7 @@
         "model": "records.drink",
         "fields": {
             "category": 10,
-            "name": "サントリー ソーダ 490mlペット",
+            "name": "サントリー ソーダ",
             "volume": 490,
             "unit": 100,
             "kcal": 0,
@@ -438,7 +438,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "ジンジャーエール 200ml缶",
+            "name": "ジンジャーエール",
             "volume": 200,
             "unit": 100,
             "kcal": 33,
@@ -452,7 +452,7 @@
         "model": "records.drink",
         "fields": {
             "category": 4,
-            "name": "トニックウォーター 200ml缶",
+            "name": "トニックウォーター",
             "volume": 200,
             "unit": 100,
             "kcal": 33,
