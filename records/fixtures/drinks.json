@@ -1,5 +1,6 @@
 [
     {
+        "pk": 1,
         "model": "records.drink",
         "fields": {
             "category": 1,
@@ -13,6 +14,7 @@
         }
     },
     {
+        "pk": 2,
         "model": "records.drink",
         "fields": {
             "category": 1,
@@ -26,6 +28,7 @@
         }
     },
     {
+        "pk": 3,
         "model": "records.drink",
         "fields": {
             "category": 1,
@@ -39,6 +42,7 @@
         }
     },    
     {
+        "pk": 4,
         "model": "records.drink",
         "fields": {
             "category": 1,
@@ -52,6 +56,7 @@
         }
     },
     {
+        "pk": 5,
         "model": "records.drink",
         "fields": {
             "category": 1,
@@ -65,6 +70,7 @@
         }
     },
     {
+        "pk": 6,
         "model": "records.drink",
         "fields": {
             "category": 2,
@@ -78,6 +84,7 @@
         }
     },
     {
+        "pk": 7,
         "model": "records.drink",
         "fields": {
             "category": 2,
@@ -91,6 +98,7 @@
         }
     },
     {
+        "pk": 8,
         "model": "records.drink",
         "fields": {
             "category": 2,
@@ -104,6 +112,7 @@
         }
     },
     {
+        "pk": 9,
         "model": "records.drink",
         "fields": {
             "category": 2,
@@ -117,6 +126,7 @@
         }
     },
     {
+        "pk": 10,
         "model": "records.drink",
         "fields": {
             "category": 2,
@@ -130,6 +140,7 @@
         }
     },
     {
+        "pk": 11,
         "model": "records.drink",
         "fields": {
             "category": 3,
@@ -143,6 +154,7 @@
         }
     },
     {
+        "pk": 12,
         "model": "records.drink",
         "fields": {
             "category": 3,
@@ -156,6 +168,7 @@
         }
     },
     {
+        "pk": 13,
         "model": "records.drink",
         "fields": {
             "category": 3,
@@ -167,17 +180,285 @@
             "salt": 0.07,
             "sugars": 6.9
         }
+    },
+    {
+        "pk": 14,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "ペプシコーラ 490mlペット",
+            "volume": 490,
+            "unit": 100,
+            "kcal": 48,
+            "caffeine": 10,
+            "salt": 0,
+            "sugars": 11.9
+        }
+    },
+    {
+        "pk": 15,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "ペプシ＜生＞BIG COLA 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 46,
+            "caffeine": 10,
+            "salt": 0.05,
+            "sugars": 11.6
+        }
+    },
+    {
+        "pk": 16,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "C.C.レモン 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 40,
+            "caffeine": 0,
+            "salt": 0.05,
+            "sugars": 10.0
+        }
+    },
+    {
+        "pk": 17,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "POP メロンソーダ 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 48,
+            "caffeine": 0,
+            "salt": 0.02,
+            "sugars": 12.0
+        }
+    },
+    {
+        "pk": 18,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "デカビタＣ 210ml瓶",
+            "volume": 210,
+            "unit": 100,
+            "kcal": 54,
+            "caffeine": 5,
+            "salt": 0.01,
+            "sugars": 13.5
+        }
+    },
+    {
+        "pk": 19,
+        "model": "records.drink",
+        "fields": {
+            "category": 5,
+            "name": "サントリー天然水 きりっと果実 オレンジ＆マンゴー 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 31,
+            "caffeine": 0,
+            "salt": 0.11,
+            "sugars": 7.8
+        }
+    },
+    {
+        "pk": 20,
+        "model": "records.drink",
+        "fields": {
+            "category": 5,
+            "name": "伊右衛門 京都レモネード 525mlペット",
+            "volume": 525,
+            "unit": 100,
+            "kcal": 40,
+            "caffeine": 2,
+            "salt": 0.05,
+            "sugars": 10.0
+        }
+    },
+    {
+        "pk": 21,
+        "model": "records.drink",
+        "fields": {
+            "category": 5,
+            "name": "なっちゃん りんご 425mlペット",
+            "volume": 425,
+            "unit": 100,
+            "kcal": 47,
+            "caffeine": 0,
+            "salt": 0.05,
+            "sugars": 11.7
+        }
+    },
+    {
+        "pk": 22,
+        "model": "records.drink",
+        "fields": {
+            "category": 6,
+            "name": "サントリー天然水 550mlペット",
+            "volume": 550,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 0,
+            "salt": 0.002,
+            "sugars": 0
+        }
+    },
+    {
+        "pk": 23,
+        "model": "records.drink",
+        "fields": {
+            "category": 6,
+            "name": "サントリー天然水スパークリング レモン 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 0,
+            "salt": 0.002,
+            "sugars": 0
+        }
+    },
+    {
+        "pk": 24,
+        "model": "records.drink",
+        "fields": {
+            "category": 6,
+            "name": "サントリー天然水 特製レモンスカッシュ 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 35,
+            "caffeine": 0,
+            "salt": 0.14,
+            "sugars": 8.8
+        }
+    },
+    {
+        "pk": 25,
+        "model": "records.drink",
+        "fields": {
+            "category": 7,
+            "name": "GREEN DA･KA･RA 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 18,
+            "caffeine": 0,
+            "salt": 0.10,
+            "sugars": 4.4
+        }
+    },
+    {
+        "pk": 26,
+        "model": "records.drink",
+        "fields": {
+            "category": 7,
+            "name": "ビタミンウォーター 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 16,
+            "caffeine": 0,
+            "salt": 0.11,
+            "sugars": 4.0
+        }
+    },
+    {
+        "pk": 27,
+        "model": "records.drink",
+        "fields": {
+            "category": 7,
+            "name": "ダカラ Wビタミン 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 18,
+            "caffeine": 0,
+            "salt": 0.10,
+            "sugars": 4.5
+        }
+    },
+    {
+        "pk": 28,
+        "model": "records.drink",
+        "fields": {
+            "category": 8,
+            "name": "GREEN DA･KA･RA すっきりしたトマト 350g缶",
+            "volume": 350,
+            "unit": 100,
+            "kcal": 23,
+            "caffeine": 0,
+            "salt": 0.10,
+            "sugars": 5.5
+        }
+    },
+    {
+        "pk": 29,
+        "model": "records.drink",
+        "fields": {
+            "category": 9,
+            "name": "ビックル500 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 45,
+            "caffeine": 0,
+            "salt": 0.07,
+            "sugars": 10.6
+        }
+    },
+    {
+        "pk": 30,
+        "model": "records.drink",
+        "fields": {
+            "category": 9,
+            "name": "いちごミルク 190g缶",
+            "volume": 190,
+            "unit": 100,
+            "kcal": 63,
+            "caffeine": 0,
+            "salt": 0.13,
+            "sugars": 7.3
+        }
+    },
+    {
+        "pk": 31,
+        "model": "records.drink",
+        "fields": {
+            "category": 10,
+            "name": "サントリー ソーダ 490mlペット",
+            "volume": 490,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 0,
+            "salt": 0,
+            "sugars": 0
+        }
+    },
+    {
+        "pk": 32,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "ジンジャーエール 200ml缶",
+            "volume": 200,
+            "unit": 100,
+            "kcal": 33,
+            "caffeine": 0,
+            "salt": 0.04,
+            "sugars": 8.3
+        }
+    },
+    {
+        "pk": 33,
+        "model": "records.drink",
+        "fields": {
+            "category": 4,
+            "name": "トニックウォーター 200ml缶",
+            "volume": 200,
+            "unit": 100,
+            "kcal": 33,
+            "caffeine": 0,
+            "salt": 0.06,
+            "sugars": 8.3
+        }
     }
-    
-        
-                
-    
-
-
-
-
-
-
-
-
 ]
