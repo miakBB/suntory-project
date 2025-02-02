@@ -7,5 +7,9 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta:
         model=get_user_model()
-        #fields=('username','email','password1','password2')
         fields = ('username', 'email', 'password1', 'password2', 'birth_date', 'gender', 'weight')
+        labels = {
+            'birth_date':'生年月日',
+            'gender':'性別',
+            'weight':'体重',
+        }    
