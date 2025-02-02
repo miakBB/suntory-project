@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>飲料記録の登録</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="id_category">カテゴリーを選択:</label>
+    <select id="id_category" name="category">
+        <option value="">カテゴリーを選択</option>
+        {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="id_drink">飲み物を選択:</label>
+    <select id="id_drink" name="drink">
+        <option value="">飲み物を選択</option>
+    </select>
+
+    <input type="hidden" name="quantity" id="id_quantity">  <!-- 自動セット用 -->
+    <label for="id_consumed_at">記録日時:</label>
+    {{ form.consumed_at }}
+
+    <button type="submit">登録</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const categorySelect = document.getElementById("id_category");
+    const drinkSelect = document.getElementById("id_drink");
+    const quantityField = document.getElementById("id_quantity");
+
+    // Django のテンプレートを JavaScript の JSON として正しく整形
+    const drinksData = [
+        {% for drink in drinks %}
+        {
+            "id": {{ drink.id }},
+            "name": "{{ drink.name|escapejs }}",
+            "category": {{ drink.category.id }},
+            "volume": {{ drink.volume }}
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    // カテゴリー選択時に飲み物リストを更新
+    categorySelect.addEventListener("change", function() {
+        const categoryId = parseInt(categorySelect.value, 10);
+        drinkSelect.innerHTML = "<option value=''>飲み物を選択</option>";
+
+        if (!isNaN(categoryId)) {
+            drinksData.filter(drink => drink.category === categoryId).forEach(drink => {
+                const option = document.createElement("option");
+                option.value = drink.id;
+                option.textContent = drink.name;
+                option.dataset.volume = drink.volume;
+                drinkSelect.appendChild(option);
+            });
+        }
+    });
+
+    // 飲み物選択時に quantity を自動セット
+    drinkSelect.addEventListener("change", function() {
+        const selectedOption = drinkSelect.options[drinkSelect.selectedIndex];
+        quantityField.value = selectedOption.dataset.volume || "";
+    });
+});
+</script>
+
+{% endblock %}

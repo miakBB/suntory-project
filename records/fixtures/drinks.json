@@ -1,0 +1,183 @@
+[
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 1,
+            "name": "ボス デミタス 微糖 185g缶",
+            "volume": 185,
+            "unit": 100,
+            "kcal": 30,
+            "caffeine": 60,
+            "salt": 0.13,
+            "sugars": 4.0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 1,
+            "name": "プレミアムボス ブラック 390gボトル缶",
+            "volume": 390,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 60,
+            "salt": 0.05,
+            "sugars": 0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 1,
+            "name": "ボス とろけるカフェオレ 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 48,
+            "caffeine": 40,
+            "salt": 0.10,
+            "sugars": 8.8
+        }
+    },    
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 1,
+            "name": "クラフトボスブラック ホット",
+            "volume": 100,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 40,
+            "salt": 0.05,
+            "sugars": 0.5
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 1,
+            "name": "クラフトボス 微糖 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 19,
+            "caffeine": 50,
+            "salt": 0.15,
+            "sugars": 2.4
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 2,
+            "name": "緑茶 伊右衛門 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 10,
+            "salt": 0.02,
+            "sugars": 0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 2,
+            "name": "伊右衛門 特茶a TOKUCHA（特定保健用食品）500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 16,
+            "salt": 0.01,
+            "sugars": 0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 2,
+            "name": "緑茶 伊右衛門 京都ブレンド 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 10,
+            "salt": 0.02,
+            "sugars": 0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 2,
+            "name": "GREEN DA･KA･RA やさしい麦茶 680mlペット",
+            "volume": 680,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 0,
+            "salt": 0.018,
+            "sugars": 0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 2,
+            "name": "緑茶 伊右衛門 BLACK 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 0,
+            "caffeine": 21.7,
+            "salt": 0.075,
+            "sugars": 0
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 3,
+            "name": "クラフトボス フルーツティー秋冬 500mlペット",
+            "volume": 500,
+            "unit": 100,
+            "kcal": 28,
+            "caffeine": 0,
+            "salt": 0.01,
+            "sugars": 7.1
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 3,
+            "name": "クラフトボス ミルクティー 600mlペット",
+            "volume": 600,
+            "unit": 100,
+            "kcal": 33,
+            "caffeine": 20,
+            "salt": 0.05,
+            "sugars": 6.4
+        }
+    },
+    {
+        "model": "records.drink",
+        "fields": {
+            "category": 3,
+            "name": "リプトン 白の贅沢 280mlペット",
+            "volume": 280,
+            "unit": 100,
+            "kcal": 37,
+            "caffeine": 10,
+            "salt": 0.07,
+            "sugars": 6.9
+        }
+    }
+    
+        
+                
+    
+
+
+
+
+
+
+
+
+]
