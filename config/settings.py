@@ -115,6 +115,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ja'
 
+LOGIN_REDIRECT_URL = '/top' #仮のメイン画面URL
+
 TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
