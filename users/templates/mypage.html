@@ -1,0 +1,12 @@
+<h2>マイページ</h2>
+<form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div>
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }} {{ field.errors }}
+        </div>
+    {% endfor %}
+    <button type="submit">変更</button>
+
+</form> 

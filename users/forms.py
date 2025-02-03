@@ -13,3 +13,15 @@ class UserRegistrationForm(UserCreationForm):
             'gender':'性別',
             'weight':'体重',
         }    
+
+class UserUpdateForm(forms.ModelForm):
+    email=forms.EmailField(required=True) #メールアドレスを必須にする文
+
+    class Meta:
+        model=get_user_model()
+        fields = ( 'email', 'birth_date', 'gender', 'weight')
+        labels = {
+            'birth_date':'生年月日',
+            'gender':'性別',
+            'weight':'体重',
+        }    
