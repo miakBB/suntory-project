@@ -117,7 +117,7 @@ LANGUAGE_CODE = 'ja'
 
 LOGIN_URL = '/users/login/'
 
-LOGIN_REDIRECT_URL = '/top' #仮のメイン画面URL
+LOGIN_REDIRECT_URL = '/dashboard/'
 
 TIME_ZONE = 'Asia/Tokyo'
 

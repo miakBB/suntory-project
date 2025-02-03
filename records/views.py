@@ -84,12 +84,12 @@ def get_weekly_data(request):
     # **ここで降順にソート**
     summary = [{"date": date, "total_quantity": quantity} for date, quantity in sorted(past_week_dates.items(), reverse=True)]
 
-    # 詳細データの取得
+    # 詳細データの取得（unit を考慮して計算）
     details = (
         Consumption.objects
         .filter(consumed_at__date__range=[start_date, today])
         .select_related("drink")
-        .values("consumed_at__date", "drink__name", "quantity", "drink__caffeine", "drink__sugars", "drink__salt")
+        .values("consumed_at__date", "drink__name", "quantity", "drink__caffeine", "drink__sugars", "drink__salt", "drink__unit")
     )
 
     details_data = {}
@@ -97,12 +97,21 @@ def get_weekly_data(request):
         date_str = str(detail["consumed_at__date"])
         if date_str not in details_data:
             details_data[date_str] = []
+        
+        # `unit` を考慮して計算
+        unit = detail["drink__unit"]
+        quantity = detail["quantity"]
+        
+        caffeine = (quantity / unit) * detail["drink__caffeine"] if unit > 0 else 0
+        sugars = (quantity / unit) * detail["drink__sugars"] if unit > 0 else 0
+        salt = (quantity / unit) * detail["drink__salt"] if unit > 0 else 0
+
         details_data[date_str].append({
             "drink_name": detail["drink__name"],
-            "quantity": detail["quantity"],
-            "caffeine": detail["drink__caffeine"],
-            "sugars": detail["drink__sugars"],
-            "salt": detail["drink__salt"]
+            "quantity": quantity,
+            "caffeine": round(caffeine, 2),
+            "sugars": round(sugars, 2),
+            "salt": round(salt, 2)
         })
 
     return JsonResponse({"summary": summary, "details": details_data}, safe=False)

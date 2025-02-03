@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>新規登録</h2>
-
 <style>
     .form-group {
         display: flex;
@@ -49,6 +47,74 @@
         font-size: 14px;
         margin-top: 5px;
     }
+    .modal {
+        display: none; /* 初期状態では非表示 */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* 背景を半透明の黒に */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* モーダルのコンテンツ */
+    .modal-content {
+        background-color: white;
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        position: relative;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    /* モーダルを閉じるボタン */
+    .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #333;
+    }
+
+    .modal-close:hover {
+        color: red;
+    }
+
+    /* モーダルタイトル */
+    .modal h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    /* エラーメッセージのスタイル */
+    .modal p {
+        white-space: pre-wrap;
+        text-align: left;
+        color: red;
+        font-size: 14px;
+        margin: 10px 0;
+    }
+
+    /* モーダルのアニメーション */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
 <div class="form-container">
@@ -80,17 +146,10 @@
         </div>
 
         <div class="form-group">
-            <label for="id_weight">体重</label>
-            <input type="number" id="id_weight" name="weight">
+            <label for="id_weight">体重(kg)</label>
+            <input type="number" id="id_weight" name="weight" min="1" max="150" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
             <span class="error-message" id="weight-error"></span>
         </div>
-
-        <div class="form-group">
-            <label for="id_birth_date">生年月日</label>
-            <input type="date" id="id_birth_date" name="birth_date">
-            <span class="error-message" id="birthdate-error"></span>
-        </div>
-
         <div class="form-group">
             <label for="id_gender">性別</label>
             <select id="id_gender" name="gender">
@@ -99,12 +158,64 @@
                 <option value="9" selected>その他</option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="id_birth_date">生年月日</label>
+            <input type="date" id="id_birth_date" name="birth_date">
+            <span class="error-message" id="birthdate-error"></span>
+        </div>
+
+        
         
         <button type="submit">新規登録</button>
     </form>
 </div>
-
+<div id="errorModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h3>エラー</h3>
+        <p id="modal-error-message"></p>
+    </div>
+</div>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById("errorModal");
+        const modalMessage = document.getElementById("modal-error-message");
+        const closeModal = document.querySelector(".modal-close");
+
+        // モーダルを閉じる処理
+        closeModal.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        // Django から渡されたエラーメッセージを取得
+        let backendErrors = JSON.parse('{{ backend_errors|default:"null" | escapejs }}');
+
+        // モーダルをデフォルトで非表示にする
+        modal.style.display = "none";
+
+        if (backendErrors && Object.keys(backendErrors).length > 0) {
+            let errorText = "<ul style='text-align: left; padding-left: 20px;'>";
+
+            if (typeof backendErrors === "string") {
+                errorText += `<li>${backendErrors}</li>`;
+            } else if (typeof backendErrors === "object") {
+                for (let key in backendErrors) {
+                    if (Array.isArray(backendErrors[key])) {
+                        errorText += `<li><strong>${key}:</strong> ${backendErrors[key].map(e => e.message || e).join(", ")}</li>`;
+                    } else {
+                        errorText += `<li><strong>${key}:</strong> ${backendErrors[key]}</li>`;
+                    }
+                }
+            }
+
+            errorText += "</ul>";
+
+            if (errorText.trim() !== "<ul></ul>") {
+                modalMessage.innerHTML = errorText;
+                modal.style.display = "flex";  // エラーがある場合のみ表示
+            }
+        }
+    });
     document.addEventListener("DOMContentLoaded", function() {
         const email = document.getElementById("id_email");
         const password1 = document.getElementById("id_password1");
@@ -193,6 +304,12 @@
 
             if (weight.value.trim() === "") {
                 weightError.textContent = "体重を入力してください。";
+                valid = false;
+            } else if (!/^\d+$/.test(weight.value)) {
+                weightError.textContent = "体重は整数で入力してください。";
+                valid = false;
+            } else if (parseInt(weight.value) < 1 || parseInt(weight.value) > 150) {
+                weightError.textContent = "体重は1から150の間で入力してください。";
                 valid = false;
             } else {
                 weightError.textContent = "";

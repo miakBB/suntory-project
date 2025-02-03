@@ -17,8 +17,8 @@ class User(AbstractUser):
         unique=False,  # ユニーク制約なし
         blank=True,
         validators=[RegexValidator(
-            regex=r'^[a-zA-Z0-9ぁ-んァ-ン一-龥]+$',
-            message="使用できるのは英数字、ひらがな、カタカナ、漢字のみです。"
+            regex=r'^[a-zA-Z0-9ぁ-んァ-ン一-龥ー]+$',
+            message="記号は使用できません。"
         )],
     )
     email = models.EmailField(unique=True)
