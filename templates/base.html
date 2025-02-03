@@ -3,33 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}飲料記録アプリ{% endblock %}</title>
+    <title>{% block title %}アクアlife{% endblock %}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        html, body {
+            height: 100%; /* 必要な高さを100%に設定 */
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
         }
-        header {
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column; /* フレックスボックスを使用してレイアウトを管理 */
+        }
+
+        header, footer {
             background-color: #3498db;
             color: white;
             padding: 10px 0;
             font-size: 20px;
+            text-align: center;
+            display: inline-block; /* 文字の幅だけに背景色を適用 */
+            margin-left: auto;
+            margin-right: auto;
+            width: auto; /* 幅を自動調整 */
         }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* 他の要素より上に表示されるように */
+        }
+
         main {
+            flex: 1; /* メイン部分が残りのスペースを埋めるように */
             padding: 20px;
+            padding-top: 60px; /* ヘッダーの高さ分の余白 */
+            padding-bottom: 50px; /* フッターの高さ分の余白 */
         }
+
         footer {
             position: fixed;
             bottom: 0;
+            left: 0;
             width: 100%;
-            background-color: #3498db;
-            color: white;
-            padding: 10px;
-            font-size: 14px;
         }
+
         .container {
             max-width: 600px;
             margin: auto;
@@ -38,6 +60,7 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         button {
             background-color: #3498db;
             color: white;
@@ -47,15 +70,26 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
         button:hover {
             background-color: #2980b9;
+        }
+
+        footer nav a {
+            color: white;
+            margin-right: 15px;
+            text-decoration: none; /* リンクの下線をなくす */
+        }
+
+        footer nav a:hover {
+            text-decoration: underline; /* ホバー時に下線を表示 */
         }
     </style>
 </head>
 <body>
 
 <header>
-    飲料記録アプリ
+    アクアlife
 </header>
 
 <main>
@@ -66,10 +100,11 @@
 
 <footer>
     <nav>
-        <a href="{% url 'create_record' %}" style="color: white; margin-right: 15px;">記録</a>
-        <a href="{% url 'list_records' %}" style="color: white;">閲覧</a>
+        <a href="{% url 'create_record' %}">記録</a>
+        <a href="{% url 'list_records' %}">閲覧</a>
     </nav>
 </footer>
 
 </body>
 </html>
+
