@@ -1,6 +1,237 @@
+{% extends "base.html" %}
+{% block content %}
 <h2>新規登録</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">新規登録</button>
-</form> 
+
+<style>
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input, select {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    .form-container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+</style>
+
+<div class="form-container">
+    <form id="register-form" method="post" novalidate> <!-- HTML5バリデーション無効化 -->
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="id_email">メールアドレス</label>
+            <input type="email" id="id_email" name="email">
+            <span class="error-message" id="email-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password1">パスワード</label>
+            <input type="password" id="id_password1" name="password1">
+            <ul class="error-message" id="password-errors"></ul>
+        </div>
+
+        <div class="form-group">
+            <label for="id_password2">パスワード（確認）</label>
+            <input type="password" id="id_password2" name="password2">
+            <span class="error-message" id="password-match-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_username">ユーザー名</label>
+            <input type="text" id="id_username" name="username">
+            <span class="error-message" id="username-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_weight">体重</label>
+            <input type="number" id="id_weight" name="weight">
+            <span class="error-message" id="weight-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_birth_date">生年月日</label>
+            <input type="date" id="id_birth_date" name="birth_date">
+            <span class="error-message" id="birthdate-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="id_gender">性別</label>
+            <select id="id_gender" name="gender">
+                <option value="1">男性</option>
+                <option value="2">女性</option>
+                <option value="9" selected>その他</option>
+            </select>
+        </div>
+        
+        <button type="submit">新規登録</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const email = document.getElementById("id_email");
+        const password1 = document.getElementById("id_password1");
+        const password2 = document.getElementById("id_password2");
+        const username = document.getElementById("id_username");
+        const weight = document.getElementById("id_weight");
+        const birthdate = document.getElementById("id_birth_date");
+        const passwordErrors = document.getElementById("password-errors");
+        const passwordMatchError = document.getElementById("password-match-error");
+        const emailError = document.getElementById("email-error");
+        const usernameError = document.getElementById("username-error");
+        const weightError = document.getElementById("weight-error");
+        const birthdateError = document.getElementById("birthdate-error");
+        const form = document.getElementById("register-form");
+
+        function validateEmail() {
+            const emailValue = email.value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailValue)) {
+                emailError.textContent = "有効なメールアドレスを入力してください。";
+                return false;
+            } else {
+                emailError.textContent = "";
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const password = password1.value;
+            passwordErrors.innerHTML = "";
+
+            let errors = [];
+
+            if (password.length < 8) {
+                errors.push("パスワードは最低8文字以上にしてください。");
+            }
+            if (!/[A-Za-z]/.test(password)) {
+                errors.push("パスワードには少なくとも1つの英字を含めてください。");
+            }
+            if (!/[0-9]/.test(password)) {
+                errors.push("パスワードには少なくとも1つの数字を含めてください。");
+            }
+            if (/^\d+$/.test(password)) {
+                errors.push("数字のみのパスワードは使用できません。");
+            }
+
+            errors.forEach(error => {
+                const li = document.createElement("li");
+                li.textContent = error;
+                passwordErrors.appendChild(li);
+            });
+        }
+
+        function checkPasswordMatch() {
+            if (password1.value !== password2.value) {
+                passwordMatchError.textContent = "パスワードが一致しません。";
+            } else {
+                passwordMatchError.textContent = "";
+            }
+        }
+
+        function validateForm() {
+            let valid = true;
+
+            if (email.value.trim() === "") {
+                emailError.textContent = "メールアドレスを入力してください。";
+                valid = false;
+            } else if (email.value.length > 128) {
+                emailError.textContent = "メールアドレスは128文字以内で入力してください。";
+                valid = false;
+            } else if (!validateEmail()) {
+                valid = false;
+            } else {
+                emailError.textContent = "";
+            }
+
+            if (username.value.trim() === "") {
+                usernameError.textContent = "ユーザー名を入力してください。";
+                valid = false;
+            } else if (username.value.length > 15) {
+                usernameError.textContent = "ユーザー名は15文字以内で入力してください。";
+                valid = false;
+            } else {
+                usernameError.textContent = "";
+            }
+
+            if (weight.value.trim() === "") {
+                weightError.textContent = "体重を入力してください。";
+                valid = false;
+            } else {
+                weightError.textContent = "";
+            }
+
+            if (birthdate.value.trim() === "") {
+                birthdateError.textContent = "生年月日を入力してください。";
+                valid = false;
+            } else {
+                birthdateError.textContent = "";
+            }
+
+            if (password1.value.trim() === "") {
+                passwordErrors.textContent = "パスワードを入力してください。";
+                valid = false;
+            } else {
+                passwordErrors.textContent = "";
+            }
+
+            return valid;
+        }
+
+        email.addEventListener("input", validateEmail);
+        password1.addEventListener("input", validatePassword);
+        password2.addEventListener("input", checkPasswordMatch);
+
+        form.addEventListener("submit", function(event) {
+            if (!validateForm()) {
+                event.preventDefault(); // フォーム送信を防ぐ
+                return false;  // 完全にブロック
+            }
+            validatePassword();
+            checkPasswordMatch();
+            if (passwordErrors.children.length > 0 || passwordMatchError.textContent !== "") {
+                event.preventDefault(); // フォーム送信を防ぐ
+                return false;  // 完全にブロック
+            }
+        });
+    });
+</script>
+
+{% endblock %}

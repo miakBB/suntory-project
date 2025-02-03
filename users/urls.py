@@ -1,10 +1,9 @@
 from django.urls import path
-from .views import register,mypage
-from django.contrib.auth import views as auth_views
+from .views import register, mypage, CustomLoginView
 
 
 urlpatterns=[
     path('register/',register,name='register'),
-    path('login/',auth_views.LoginView.as_view(template_name='login.html'),name='login'),
+    path('login/', CustomLoginView.as_view(), name='login'),
     path('mypage/',mypage,name='mypage'),
 ] 
