@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>ダッシュボード</h2>
+<h1>ダッシュボード</h1>
 
-<button onclick="window.location.href='/records/create/'">摂取量を記録</button>
-
+<!-- 記録作成ボタン -->
+<div class="button-container">
+    <button id="recordButton" onclick="window.location.href='/records/create'">
+        <span class="button-text">記録作成</span>
+        <i class="fa-solid fa-pen"></i>
+    </button>
+</div>
 <!-- ① 今日の水分摂取量 -->
 <div class="container">
     <h3>今日の水分摂取量</h3>
     <div class="chart-container">
         <canvas id="waterIntakeChart"></canvas>
         <div class="chart-text">
-            <span id="intakeValue"></span>
+            <span id="intakeValue"></span><span id="unit">ml</span>
             <br>
             <span id="goalValue"></span>
         </div>
@@ -18,6 +23,7 @@
     <!-- ② 今日の栄養素摂取（横向きバー） -->
     <h3>今日の栄養素摂取</h3>
     <canvas id="nutritionChart"></canvas>
+    <button onclick="window.location.href='/records/list'">摂取量の閲覧</button>
 </div>
 
 <!-- ③ 直近1週間の水分摂取量（棒グラフ） -->
@@ -33,6 +39,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     fetch("/dashboard/api/data/")
@@ -40,8 +50,9 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             let dailyTotal = data.daily_total;
             let requiredWater = data.required_water;
+            let nutrition_maxValue = Math.max(data.nutrition.kcal, data.nutrition.sugars, data.nutrition.caffeine, 1);
 
-            document.getElementById("intakeValue").textContent = `${dailyTotal}ml`;
+            document.getElementById("intakeValue").textContent = dailyTotal;
             document.getElementById("goalValue").textContent = `/${requiredWater}ml`;
 
             // ① 今日の水分摂取量 (円グラフ)
@@ -50,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: {
                     datasets: [{
                         data: [dailyTotal, Math.max(0, requiredWater - dailyTotal)],  // データ順を入れ替え
-                        backgroundColor: [ "#6DBEFF","#B0B0B0"],  // 摂取分: グレー, 不足分: 水色
+                        backgroundColor: [ "#6DBEFF","#B0B0B0"],  
                         borderWidth: 0,  // ギャップを削除
                         hoverBorderWidth: 0 // ホバー時の枠線を無効化
                     }]
@@ -69,21 +80,48 @@ document.addEventListener("DOMContentLoaded", function() {
             new Chart(document.getElementById("nutritionChart"), {
                 type: "bar",
                 data: {
-                    labels: ["カフェイン", "塩分", "糖分"],
+                    labels: ["カロリー", "糖分", "カフェイン"],
                     datasets: [{
-                        label: "摂取量",
-                        data: [data.nutrition.caffeine, data.nutrition.salt, data.nutrition.sugars],
-                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+                        data: [data.nutrition.kcal, data.nutrition.sugars, data.nutrition.caffeine],
+                        backgroundColor: ["hsl(359, 61%, 73%)", "hsl(311, 61%, 73%)", "hsl(128, 61%, 73%)"]
                     }]
                 },
                 options: {
-                    indexAxis: 'y'  // 横向きのバー
+                    indexAxis: 'y',  // 横向きバー
+                    scales: {
+                        x: { 
+                            beginAtZero: true,  // 0から始める
+                            grid: { display: false },  // ✅ X軸のグリッドを非表示
+                            ticks: { display: false }, // ✅ X軸の数値を非表示
+                            suggestedMax: nutrition_maxValue * 1.2, // ✅ 最大値の1.2倍まで余白を作る
+                            border: { display: false }
+                        },
+                        y: {
+                            grid: { display: false },  // ✅ Y軸のグリッドも非表示
+                            //border: { display: false }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },  // 凡例を非表示
+                        tooltip: {
+                            displayColors: false,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    let label = tooltipItem.dataset.label || '';
+                                    let value = tooltipItem.raw;
+                                    let unit = ['kcal', 'g', 'mg'][tooltipItem.dataIndex];  // 各データの単位
+                                    return `${value} ${unit}`;
+                                }
+                            }
+                        }
+                    }
                 }
             });
 
             // ③ 直近1週間の水分摂取量（棒グラフ・最新日を右側）
             let reversedDates = data.weekly_data.map(entry => entry.date).reverse();
             let reversedValues = data.weekly_data.map(entry => entry.total).reverse();
+            let maxValue = Math.max(...reversedValues, requiredWater);
 
             new Chart(document.getElementById("weeklyChart"), {
                 type: "bar",  
@@ -92,25 +130,75 @@ document.addEventListener("DOMContentLoaded", function() {
                     datasets: [{
                         label: "水分摂取量 (ml)",
                         data: reversedValues,
-                        backgroundColor: "#36A2EB",
-                        borderColor: "#36A2EB",
+                        backgroundColor: "#84D3E2",
+                        borderColor: "#84D3E2",
                         borderWidth: 1
                     }]
                 },
                 options: {
                     scales: {
-                        y: { beginAtZero: true }
+                        x: { 
+                            beginAtZero: true,  // 0から始める
+                            //grid: { display: false },  // ✅ X軸のグリッドを非表示
+                        },
+                        y: {
+                            suggestedMax: maxValue * 1.1,
+                            grid: { display: false },
+                            beginAtZero: true,
+                            ticks: { display: false }, // ✅ Y軸の数値を非表示
+                            border: { display: false },
+                        },
+                    },
+                    plugins: {
+                        legend: { display: false },  // 凡例を非表示
+                        tooltip: {
+                            displayColors: false,
+                            callbacks: {
+                                label: function(tooltipItem) {
+                                    let label = tooltipItem.dataset.label || '';
+                                    let value = tooltipItem.raw;
+                                    let unit = "ml";  // 各データの単位
+                                    return `${value} ${unit}`;
+                                }
+                            }
+                        },
+                        annotation: {
+                            annotations: {
+                                requiredWaterLine: {
+                                    type: "line",
+                                    yMin: requiredWater,
+                                    yMax: requiredWater,
+                                    borderColor: "red",
+                                    borderWidth: 2,
+                                    borderDash: [5, 5],
+                                    label: {
+                                        enabled: true,
+                                        content: "目標水分量",
+                                        position: "end"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });
 
             // ④ お気に入り飲料
             let favoriteList = document.getElementById("favoriteDrinks");
-            data.favorite_drinks.forEach(entry => {
+            // 既存のリストをクリア
+            favoriteList.innerHTML = "";
+
+            if (data.favorite_drinks.length === 0) {
                 let li = document.createElement("li");
-                li.textContent = `${entry.drink__name} (${entry.total} ml)`;
+                li.textContent = "記録がありません";
                 favoriteList.appendChild(li);
-            });
+            } else {
+                data.favorite_drinks.forEach(entry => {
+                    let li = document.createElement("li");
+                    li.textContent = entry.drink__name;
+                    favoriteList.appendChild(li);
+                });
+            }
         });
 });
 </script>
@@ -125,9 +213,18 @@ document.addEventListener("DOMContentLoaded", function() {
     
     .chart-container {
         position: relative;
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
         margin: 0 auto;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 20px;  /* 適宜調整 */
+        margin-bottom: 30px;
     }
     
     .chart-text {
@@ -139,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     #intakeValue {
-        font-size: 36px;  /* 摂取量のフォントサイズを大きく */
+        font-size: 40px;  /* 摂取量のフォントサイズを大きく */
         font-weight: bold;
     }
     
@@ -156,6 +253,43 @@ document.addEventListener("DOMContentLoaded", function() {
         cursor: pointer;
         margin-top: 10px;
     }
+
+    #unit {
+        font-size: 21px;  /* ml だけ小さく */
+        font-weight: normal;
+        display: inline-block;
+        margin-left: 2px;
+    }
+    ul {
+        list-style-type: none;
+    }
+    #recordButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: black;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 5px; /* テキストとアイコンの間隔 */
+        width: 200px;
+    }
+    .button-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+    }
+
+
+    #recordButton i {
+        font-size: 24px;
+    }
+    
 </style>
 
 {% endblock %}
