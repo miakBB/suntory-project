@@ -11,4 +11,317 @@
         font-weight: bold;
         margin-bottom: 20px;
         width: 100%;
-   
+        position: relative;
+    }
+    /* 戻るボタンのスタイル */
+    .back-button {
+        position: absolute;
+        left: 20px; /* メールアドレスと同じ横軸に配置 */
+        top: 5px; /* 新規登録と同じ縦軸に配置 */
+        font-size: 22px; /* 矢印を少し太く */
+        cursor: pointer;
+        color: gray; /* 矢印の色を灰色に */
+        text-decoration: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* フォーム自体のスタイル */
+    .form-container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        background-color: white; /* フォーム自体の背景色を白に */
+        border-radius: 8px;
+        box-shadow: none; /* 影を消す */
+    }
+    /* 入力欄のスタイル */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+    }
+    label .required {
+        color: red;
+        font-size: 18px;
+        margin-left: 5px;
+    }
+    input, select {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: white; /* 入力欄の背景色を白に */
+    }
+    button{
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="form-header">
+    <a href="{% url 'dashboard' %}" class="back-button">
+        <span class="back-arrow">←</span>
+    </a>
+    マイページ
+</div>
+
+<div class="container">
+    <div class="form-container">
+        <form id="update-form" method="post" action="{% url 'update' %}" novalidate>
+            {% csrf_token %}
+            <!-- メールアドレス -->
+            <div class="form-group">
+                <label for="id_email">メールアドレス
+                    <span class="required">*</span>
+                </label>
+                <input type="email" id="id_email" name="email" placeholder="メールアドレスを入力">
+                <span class="error-message" id="email-error"></span>
+            </div>
+            <!-- ユーザーネーム -->
+            <div class="form-group">
+                <label for="id_username">ユーザーネーム
+                    <span class="required">*</span>
+                </label>
+                <input type="text" id="id_username" name="username" placeholder="ユーザー名を入力">
+                <span class="error-message" id="username-error"></span>
+            </div>
+            <!-- 体重 -->
+            <div class="form-group">
+                <label for="id_weight">体重(kg)
+                    <span class="required">*</span>
+                </label>
+                <input type="number" id="id_weight" name="weight" min="1" max="150" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                <span class="error-message" id="weight-error"></span>
+            </div>
+            <!-- 性別 -->
+            <div class="form-group">
+                <label for="id_gender">性別</label>
+                <select id="id_gender" name="gender">
+                    <option value="1">男性</option>
+                    <option value="2">女性</option>
+                    <option value="9" selected>その他</option>
+                </select>
+            </div>
+            <!-- 生年月日 -->
+            <div class="form-group">
+                <label for="id_birth_date">生年月日</label>
+                <input type="date" id="id_birth_date" name="birth_date" placeholder="生年月日を入力">
+                <span class="error-message" id="birthdate-error"></span>
+            </div>
+            <!-- 変更ボタン -->
+            <button type="submit">変更</button>
+        </form>
+    </div>
+</div>
+<!-- エラーモーダル -->
+<div id="errorModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h3>エラー</h3>
+        <p id="modal-error-message"></p>
+    </div>
+</div>
+
+<!-- エラー処理 -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const modal = document.getElementById("errorModal");
+        const modalMessage = document.getElementById("modal-error-message");
+        const closeModal = document.querySelector(".modal-close");
+
+        closeModal.addEventListener("click", function() {
+            modal.style.display = "none";
+        });
+
+        let backendErrors = JSON.parse('{{ backend_errors|default:"null" | escapejs }}');
+
+        modal.style.display = "none";
+
+        if (backendErrors && Object.keys(backendErrors).length > 0) {
+            let errorText = "<ul style='text-align: left; padding-left: 20px;'>";
+
+            if (typeof backendErrors === "string") {
+                errorText += `<li>${backendErrors}</li>`;
+            } else if (typeof backendErrors === "object") {
+                for (let key in backendErrors) {
+                    if (Array.isArray(backendErrors[key])) {
+                        errorText += `<li><strong>${key}:</strong> ${backendErrors[key].map(e => e.message || e).join(", ")}</li>`;
+                    } else {
+                        errorText += `<li><strong>${key}:</strong> ${backendErrors[key]}</li>`;
+                    }
+                }
+            }
+            errorText += "</ul>";
+
+            if (errorText.trim() !== "<ul></ul>") {
+                modalMessage.innerHTML = errorText;
+                modal.style.display = "flex";  // エラーがある場合のみ表示
+            }
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        const email = document.getElementById("id_email");
+        const password1 = document.getElementById("id_password1");
+        const password2 = document.getElementById("id_password2");
+        const username = document.getElementById("id_username");
+        const weight = document.getElementById("id_weight");
+        const birthdate = document.getElementById("id_birth_date");
+        const passwordErrors = document.getElementById("password-errors");
+        const passwordMatchError = document.getElementById("password-match-error");
+        const emailError = document.getElementById("email-error");
+        const usernameError = document.getElementById("username-error");
+        const weightError = document.getElementById("weight-error");
+        const birthdateError = document.getElementById("birthdate-error");
+        const form = document.getElementById("update-form");
+
+        function validateEmail() {
+            const emailValue = email.value;
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailValue)) {
+                emailError.textContent = "有効なメールアドレスを入力してください。";
+                return false;
+            } else {
+                emailError.textContent = "";
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const password = password1.value;
+            passwordErrors.innerHTML = "";
+
+            let errors = [];
+
+            if (password.length < 8) {
+                errors.push("パスワードは最低8文字以上にしてください。");
+            }
+            if (!/[A-Za-z]/.test(password)) {
+                errors.push("パスワードには少なくとも1つの英字を含めてください。");
+            }
+            if (!/[0-9]/.test(password)) {
+                errors.push("パスワードには少なくとも1つの数字を含めてください。");
+            }
+            if (/^\d+$/.test(password)) {
+                errors.push("数字のみのパスワードは使用できません。");
+            }
+
+            errors.forEach(error => {
+                const li = document.createElement("li");
+                li.textContent = error;
+                passwordErrors.appendChild(li);
+            });
+        }
+
+        function checkPasswordMatch() {
+            if (password1.value !== password2.value) {
+                passwordMatchError.textContent = "パスワードが一致しません。";
+            } else {
+                passwordMatchError.textContent = "";
+            }
+        }
+
+        function validateForm() {
+            let valid = true;
+
+            if (email.value.trim() === "") {
+                emailError.textContent = "メールアドレスを入力してください。";
+                valid = false;
+            } else if (email.value.length > 128) {
+                emailError.textContent = "メールアドレスは128文字以内で入力してください。";
+                valid = false;
+            } else if (!validateEmail()) {
+                valid = false;
+            } else {
+                emailError.textContent = "";
+            }
+
+            if (username.value.trim() === "") {
+                usernameError.textContent = "ユーザー名を入力してください。";
+                valid = false;
+            } else if (username.value.length > 15) {
+                usernameError.textContent = "ユーザー名は15文字以内で入力してください。";
+                valid = false;
+            } else {
+                usernameError.textContent = "";
+            }
+
+            if (weight.value.trim() === "") {
+                weightError.textContent = "体重を入力してください。";
+                valid = false;
+            } else if (!/^\d+$/.test(weight.value)) {
+                weightError.textContent = "体重は整数で入力してください。";
+                valid = false;
+            } else if (parseInt(weight.value) < 1 || parseInt(weight.value) > 150) {
+                weightError.textContent = "体重は1から150の間で入力してください。";
+                valid = false;
+            } else {
+                weightError.textContent = "";
+            }
+
+            if (birthdate.value.trim() === "") {
+                birthdateError.textContent = "生年月日を入力してください。";
+                valid = false;
+            } else {
+                birthdateError.textContent = "";
+            }
+
+            if (password1.value.trim() === "") {
+                passwordErrors.textContent = "パスワードを入力してください。";
+                valid = false;
+            } else {
+                passwordErrors.textContent = "";
+            }
+
+            return valid;
+        }
+
+        email.addEventListener("input", validateEmail);
+        password1.addEventListener("input", validatePassword);
+        password2.addEventListener("input", checkPasswordMatch);
+
+        form.addEventListener("submit", function(event) {
+            if (!validateForm()) {
+                event.preventDefault(); // フォーム送信を防ぐ
+                return false;  // 完全にブロック
+            }
+            validatePassword();
+            checkPasswordMatch();
+            if (passwordErrors.children.length > 0 || passwordMatchError.textContent !== "") {
+                event.preventDefault(); // フォーム送信を防ぐ
+                return false;  // 完全にブロック
+            }
+        });
+    });
+</script>
+{% endblock %}
