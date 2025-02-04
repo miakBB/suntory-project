@@ -11,7 +11,7 @@ class CustomLoginView(LoginView):
     authentication_form = UserLoginForm
     template_name = 'login.html'  # 使用するテンプレートを指定
     def get_success_url(self):
-        return reverse_lazy('/dashboard/')
+        return reverse_lazy('dashboard')
     
 #ユーザー登録
 def register(request):
