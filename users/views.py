@@ -3,12 +3,16 @@ from .forms import UserRegistrationForm, UserUpdateForm, UserLoginForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
+
 
 #カスタムログインビュー(メールアドレス)
 class CustomLoginView(LoginView):
     authentication_form = UserLoginForm
-    template_name = 'login.html'
-
+    template_name = 'login.html'  # 使用するテンプレートを指定
+    def get_success_url(self):
+        return reverse_lazy('dashboard')
+    
 #ユーザー登録
 def register(request):
     backend_errors = None  # エラーメッセージ用
@@ -23,7 +27,7 @@ def register(request):
                 user.save()
 
                 login(request, user)
-                return redirect("dashboard/")  # ダッシュボードへリダイレクト
+                return redirect("/dashboard/")  # ダッシュボードへリダイレクト
             
             except Exception as e:
                 backend_errors = str(e)  # 予期せぬエラーが発生した場合
@@ -39,7 +43,7 @@ def register(request):
     return render(request, 'register.html', {'form': form, 'backend_errors': backend_errors})
 
 @login_required
-def mypage(request):
+def update(request):
     user = request.user
     if request.method == 'POST':
         form = UserUpdateForm(request.POST)
@@ -50,7 +54,7 @@ def mypage(request):
             user.gender = form.cleaned_data.get('gender')     
             user.weight = form.cleaned_data.get('weight')
             user.save()
-            return redirect('mypage') #マイページへリダイレクト
+            return redirect('update') #マイページへリダイレクト
     else:
         #ユーザーデータをフォームにセット
         data = {
@@ -61,4 +65,4 @@ def mypage(request):
             'weight':user.weight,
         }
         form = UserUpdateForm(data)
-    return render(request,'mypage.html',{'form':form}) 
+    return render(request,'update.html',{'form':form}) 

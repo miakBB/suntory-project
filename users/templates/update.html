@@ -1,148 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
+
 <style>
-    /* 入力欄のスタイル */
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        margin-bottom: 10px;
-    }
-
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        display: flex;
-        align-items: center;
-    }
-
-    ul{
-        list-style-type: none;
-        padding-left: 0;
-    }
-    label .required {
-        color: red;
-        font-size: 18px;
-        margin-left: 5px;
-    }
-
-    input, select {
-        padding: 8px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: white; /* 入力欄の背景色を白に */
-    }
-
-    button {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        font-size: 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    button:hover {
-        background-color: #0056b3;
-    }
-
-    .arrow {
-        margin-left: 10px;
-        font-size: 18px;
-    }
-
-    /* フォーム自体のスタイル */
-    .form-container {
-        max-width: 400px;
-        margin: auto;
-        padding: 20px;
-        background-color: white; /* フォーム自体の背景色を白に */
-        border-radius: 8px;
-        box-shadow: none; /* 影を消す */
-    }
-
-    /* フォーム全体の背景色を変更 */
-    .form-wrapper {
-        background-color: rgb(255, 255, 255); /* 背景色を変更 */
-        padding: 40px 0;
-    }
-
-    /* エラーメッセージのスタイル */
-    .error-message {
-        color: red;
-        font-size: 14px;
-        margin-top: 5px;
-    }
-
-    /* モーダルのスタイル */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .modal-content {
-        background-color: white;
-        width: 90%;
-        max-width: 400px;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        position: relative;
-        animation: fadeIn 0.3s ease-in-out;
-    }
-
-    .modal-close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        color: #333;
-    }
-
-    .modal-close:hover {
-        color: red;
-    }
-
-    .modal h3 {
-        font-size: 20px;
-        margin-bottom: 15px;
-    }
-
-    .modal p {
-        white-space: pre-wrap;
-        text-align: left;
-        color: red;
-        font-size: 14px;
-        margin: 10px 0;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
     /* 新規登録の文字を中央配置 */
     .form-header {
         display: flex;
@@ -154,7 +13,6 @@
         width: 100%;
         position: relative;
     }
-
     /* 戻るボタンのスタイル */
     .back-button {
         position: absolute;
@@ -170,32 +28,79 @@
         justify-content: center;
     }
 
-    .back-arrow {
-        margin-right: 8px;
-        font-weight: bold; /* 矢印を太く */
-        font-size: 24px; /* 矢印のサイズを少し大きく */
+    /* フォーム自体のスタイル */
+    .form-container {
+        max-width: 400px;
+        margin: auto;
+        padding: 20px;
+        background-color: white; /* フォーム自体の背景色を白に */
+        border-radius: 8px;
+        box-shadow: none; /* 影を消す */
+    }
+    /* 入力欄のスタイル */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
     }
 
-    /* ボタンのみを中央に配置 */
-    .form-group-submit {
+    .error-message {
+        color: red;
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
         display: flex;
-        justify-content: center;
-        width: 100%;
+        align-items: center;
+    }
+    label .required {
+        color: red;
+        font-size: 18px;
+        margin-left: 5px;
+    }
+    input, select {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: white; /* 入力欄の背景色を白に */
+    }
+    button{
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+    }
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
 <div class="form-header">
-    <!-- 戻るボタン -->
-    <a href="{% url 'login' %}" class="back-button">
+    <a href="{% url 'dashboard' %}" class="back-button">
         <span class="back-arrow">←</span>
     </a>
-    新規登録
+    マイページ
 </div>
 
 <div class="container">
     <div class="form-container">
-        <form id="register-form" method="post" novalidate> <!-- HTML5バリデーション無効化 -->
+        <form id="update-form" method="post" action="{% url 'update' %}" novalidate>
             {% csrf_token %}
+            <!-- メールアドレス -->
             <div class="form-group">
                 <label for="id_email">メールアドレス
                     <span class="required">*</span>
@@ -203,23 +108,7 @@
                 <input type="email" id="id_email" name="email" placeholder="メールアドレスを入力">
                 <span class="error-message" id="email-error"></span>
             </div>
-
-            <div class="form-group">
-                <label for="id_password1">パスワード
-                    <span class="required">*</span>
-                </label>
-                <input type="password" id="id_password1" name="password1" placeholder="パスワードを入力">
-                <ul class="error-message" id="password-errors"></ul>
-            </div>
-
-            <div class="form-group">
-                <label for="id_password2">パスワード（確認）
-                    <span class="required">*</span>
-                </label>
-                <input type="password" id="id_password2" name="password2" placeholder="パスワードを再入力">
-                <span class="error-message" id="password-match-error"></span>
-            </div>
-
+            <!-- ユーザーネーム -->
             <div class="form-group">
                 <label for="id_username">ユーザーネーム
                     <span class="required">*</span>
@@ -227,7 +116,7 @@
                 <input type="text" id="id_username" name="username" placeholder="ユーザー名を入力">
                 <span class="error-message" id="username-error"></span>
             </div>
-
+            <!-- 体重 -->
             <div class="form-group">
                 <label for="id_weight">体重(kg)
                     <span class="required">*</span>
@@ -235,7 +124,7 @@
                 <input type="number" id="id_weight" name="weight" min="1" max="150" step="1" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                 <span class="error-message" id="weight-error"></span>
             </div>
-
+            <!-- 性別 -->
             <div class="form-group">
                 <label for="id_gender">性別</label>
                 <select id="id_gender" name="gender">
@@ -244,24 +133,18 @@
                     <option value="9" selected>その他</option>
                 </select>
             </div>
-
+            <!-- 生年月日 -->
             <div class="form-group">
                 <label for="id_birth_date">生年月日</label>
                 <input type="date" id="id_birth_date" name="birth_date" placeholder="生年月日を入力">
                 <span class="error-message" id="birthdate-error"></span>
             </div>
-
-            <!-- 新規登録ボタンのみを中央に配置 -->
-            <div class="form-group-submit">
-                <button type="submit">
-                    新規登録
-                    <span class="arrow">→</span>
-                </button>
-            </div>
+            <!-- 変更ボタン -->
+            <button type="submit">変更</button>
         </form>
     </div>
 </div>
-
+<!-- エラーモーダル -->
 <div id="errorModal" class="modal">
     <div class="modal-content">
         <span class="modal-close">&times;</span>
@@ -270,6 +153,7 @@
     </div>
 </div>
 
+<!-- エラー処理 -->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const modal = document.getElementById("errorModal");
@@ -319,7 +203,7 @@
         const usernameError = document.getElementById("username-error");
         const weightError = document.getElementById("weight-error");
         const birthdateError = document.getElementById("birthdate-error");
-        const form = document.getElementById("register-form");
+        const form = document.getElementById("update-form");
 
         function validateEmail() {
             const emailValue = email.value;
