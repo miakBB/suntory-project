@@ -16,7 +16,7 @@ class Drink(models.Model):
     kcal = models.FloatField() # カロリー
     caffeine = models.FloatField()  # カフェイン含有量（mg）
     salt = models.FloatField()  # 塩分（g）
-    sugars = models.FloatField()  # 糖分（g）
+    sugars = models.FloatField()  # 糖類（g）
 
     def __str__(self):
         return self.name
