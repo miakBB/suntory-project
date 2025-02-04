@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from .models import Drink, DrinkCategory, Consumption
 from .forms import ConsumptionForm
-from django.utils.timezone import now
+from django.utils.timezone import now, timedelta
+from django.db.models import Sum
+from django.http import JsonResponse
 
-
+@login_required
 def create_record(request):
     categories = DrinkCategory.objects.all()
     drinks = Drink.objects.all()
@@ -43,26 +46,12 @@ def create_record(request):
         "drinks": drinks,
         "past_week_dates": past_week_dates,  # 直近1週間の日付リストをテンプレートに渡す
     })
-""" テスト時のコード のちに削除
-from django.shortcuts import render
-from django.http import HttpResponse
 
-def create_record(request):
-    return HttpResponse("飲料記録の登録ページ（未実装）")
-
-from django.http import HttpResponse
-def list_records(request):
-    return HttpResponse("飲料記録の閲覧ページ（未実装）")
-"""
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.utils.timezone import timedelta
-from django.db.models import Sum
-
+@login_required
 def list_records(request):
     return render(request, "records/list_records.html")
 
-
+@login_required
 def get_weekly_data(request):
     today = now().date()
     start_date = today - timedelta(days=6)  # 1週間前
@@ -73,7 +62,7 @@ def get_weekly_data(request):
     # DBから取得したデータを統合
     records = (
         Consumption.objects
-        .filter(consumed_at__date__range=[start_date, today])
+        .filter(user=request.user, consumed_at__date__range=[start_date, today])
         .values("consumed_at__date")
         .annotate(total_quantity=Sum("quantity"))
     )
@@ -81,13 +70,14 @@ def get_weekly_data(request):
     for record in records:
         past_week_dates[str(record["consumed_at__date"])] = record["total_quantity"]
 
+
     # **ここで降順にソート**
     summary = [{"date": date, "total_quantity": quantity} for date, quantity in sorted(past_week_dates.items(), reverse=True)]
 
     # 詳細データの取得（unit を考慮して計算）
     details = (
         Consumption.objects
-        .filter(consumed_at__date__range=[start_date, today])
+        .filter(user=request.user, consumed_at__date__range=[start_date, today])
         .select_related("drink")
         .values("consumed_at__date", "drink__name", "quantity", "drink__caffeine", "drink__sugars", "drink__salt", "drink__unit")
     )

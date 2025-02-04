@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>ダッシュボード</h2>
+
+<button onclick="window.location.href='/records/create/'">摂取量を記録</button>
+
+<!-- ① 今日の水分摂取量 -->
+<div class="container">
+    <h3>今日の水分摂取量</h3>
+    <div class="chart-container">
+        <canvas id="waterIntakeChart"></canvas>
+        <div class="chart-text">
+            <span id="intakeValue"></span>
+            <br>
+            <span id="goalValue"></span>
+        </div>
+    </div>
+    <!-- ② 今日の栄養素摂取（横向きバー） -->
+    <h3>今日の栄養素摂取</h3>
+    <canvas id="nutritionChart"></canvas>
+</div>
+
+<!-- ③ 直近1週間の水分摂取量（棒グラフ） -->
+<div class="container">
+    <h3>過去1週間の水分摂取</h3>
+    <canvas id="weeklyChart"></canvas>
+</div>
+
+<!-- ④ お気に入り飲料 -->
+<div class="container">
+    <h3>お気に入りの飲料 (過去4週間)</h3>
+    <ul id="favoriteDrinks"></ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("/dashboard/api/data/")
+        .then(response => response.json())
+        .then(data => {
+            let dailyTotal = data.daily_total;
+            let requiredWater = data.required_water;
+
+            document.getElementById("intakeValue").textContent = `${dailyTotal}ml`;
+            document.getElementById("goalValue").textContent = `/${requiredWater}ml`;
+
+            // ① 今日の水分摂取量 (円グラフ)
+            new Chart(document.getElementById("waterIntakeChart"), {
+                type: "doughnut",
+                data: {
+                    datasets: [{
+                        data: [dailyTotal, Math.max(0, requiredWater - dailyTotal)],  // データ順を入れ替え
+                        backgroundColor: [ "#6DBEFF","#B0B0B0"],  // 摂取分: グレー, 不足分: 水色
+                        borderWidth: 0,  // ギャップを削除
+                        hoverBorderWidth: 0 // ホバー時の枠線を無効化
+                    }]
+                },
+                options: {
+                    cutout: "80%",  // 円の真ん中を大きく開ける
+                    plugins: {
+                        tooltip: { enabled: false },  // ツールチップを無効化
+                        legend: { display: false }  // ラベル非表示
+                    }
+                }
+            });
+        
+
+            // ② 今日の栄養素摂取 (横向きバー)
+            new Chart(document.getElementById("nutritionChart"), {
+                type: "bar",
+                data: {
+                    labels: ["カフェイン", "塩分", "糖分"],
+                    datasets: [{
+                        label: "摂取量",
+                        data: [data.nutrition.caffeine, data.nutrition.salt, data.nutrition.sugars],
+                        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+                    }]
+                },
+                options: {
+                    indexAxis: 'y'  // 横向きのバー
+                }
+            });
+
+            // ③ 直近1週間の水分摂取量（棒グラフ・最新日を右側）
+            let reversedDates = data.weekly_data.map(entry => entry.date).reverse();
+            let reversedValues = data.weekly_data.map(entry => entry.total).reverse();
+
+            new Chart(document.getElementById("weeklyChart"), {
+                type: "bar",  
+                data: {
+                    labels: reversedDates.map(date => date.slice(5)), // `YYYY-MM-DD` → `MM-DD`
+                    datasets: [{
+                        label: "水分摂取量 (ml)",
+                        data: reversedValues,
+                        backgroundColor: "#36A2EB",
+                        borderColor: "#36A2EB",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // ④ お気に入り飲料
+            let favoriteList = document.getElementById("favoriteDrinks");
+            data.favorite_drinks.forEach(entry => {
+                let li = document.createElement("li");
+                li.textContent = `${entry.drink__name} (${entry.total} ml)`;
+                favoriteList.appendChild(li);
+            });
+        });
+});
+</script>
+
+<style>
+    .container {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 10px 0;
+        text-align: center;
+    }
+    
+    .chart-container {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+    
+    .chart-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    
+    #intakeValue {
+        font-size: 36px;  /* 摂取量のフォントサイズを大きく */
+        font-weight: bold;
+    }
+    
+    #goalValue {
+        text-align: right;
+        display: block;
+    }
+    button {
+        background-color: #337ab7;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+</style>
+
+{% endblock %}
