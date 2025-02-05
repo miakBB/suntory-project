@@ -1,47 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>飲料記録の登録</h2>
 
-<form method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 300px;">
-    {% csrf_token %}
+<div class="content-header">
+    <a href="{% url 'dashboard' %}" class="back-button">
+        <span class="back-arrow">←</span>
+    </a>
+    <h1 class="title">飲料記録の登録</h1>
+</div>
 
-    <!-- カテゴリー選択 -->
-    <div>
-        <label for="id_category">カテゴリーを選択:</label>
-        <select id="id_category" name="category" style="width: 100%;">
-            <option value="">カテゴリーを選択</option>
-            {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-    </div>
+<div class="container">
+    <form method="post" style="display: flex; flex-direction: column; gap: 15px; max-width: 300px;">
+        {% csrf_token %}
 
-    <!-- 飲み物選択 -->
-    <div>
-        <label for="id_drink">飲み物を選択:</label>
-        <select id="id_drink" name="drink" style="width: 100%;">
-            <option value="">飲み物を選択</option>
-        </select>
-    </div>
+        <!-- カテゴリー選択 -->
+        <div>
+            <label for="id_category">カテゴリーを選択:</label>
+            <select id="id_category" name="category" style="width: 100%;">
+                <option value="">カテゴリーを選択</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-    <input type="hidden" name="quantity" id="id_quantity">  <!-- 自動セット用 -->
+        <!-- 飲み物選択 -->
+        <div>
+            <label for="id_drink">飲み物を選択:</label>
+            <select id="id_drink" name="drink" style="width: 100%;">
+                <option value="">飲み物を選択</option>
+            </select>
+        </div>
 
-    <!-- 飲んだ日選択 -->
-    <div>
-        <label for="id_consumed_at">飲んだ日:</label>
-        <select name="consumed_at" id="id_consumed_at" style="width: 100%;">
-            {% for date in past_week_dates %}
-            <option value="{{ date }}" {% if forloop.first %}selected{% endif %}>{{ date }}</option>
-            {% endfor %}
-        </select>
-    </div>
+        <input type="hidden" name="quantity" id="id_quantity">  <!-- 自動セット用 -->
 
-    <!-- 登録ボタン -->
-    <button type="submit" style="width: 100%; padding: 10px; background-color: #337ab7; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        登録
-    </button>
-</form>
+        <!-- 飲んだ日選択 -->
+        <div>
+            <label for="id_consumed_at">飲んだ日:</label>
+            <select name="consumed_at" id="id_consumed_at" style="width: 100%;">
+                {% for date in past_week_dates %}
+                <option value="{{ date }}" {% if forloop.first %}selected{% endif %}>{{ date }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
+        <!-- 登録ボタン -->
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #337ab7; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            登録
+        </button>
+    </form>
+</div>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const categorySelect = document.getElementById("id_category");
