@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>ダッシュボード</h1>
+<h1 class="title">ダッシュボード</h1>
 
 <!-- 記録作成ボタン -->
 <div class="button-container">
@@ -11,7 +11,8 @@
 </div>
 <!-- ① 今日の水分摂取量 -->
 <div class="container">
-    <h3>今日の水分摂取量</h3>
+    <h1>今日の記録</h1>
+    <h3>水分摂取量</h3>
     <div class="chart-container">
         <canvas id="waterIntakeChart"></canvas>
         <div class="chart-text">
@@ -21,9 +22,9 @@
         </div>
     </div>
     <!-- ② 今日の栄養素摂取（横向きバー） -->
-    <h3>今日の栄養素摂取</h3>
+    <h3>栄養素摂取量</h3>
     <canvas id="nutritionChart"></canvas>
-    <button onclick="window.location.href='/records/list'">摂取量の閲覧</button>
+    <button onclick="window.location.href='/records/list'" id="hoge">摂取量の閲覧</button>
 </div>
 
 <!-- ③ 直近1週間の水分摂取量（棒グラフ） -->
@@ -204,13 +205,6 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>
 
 <style>
-    .container {
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin: 10px 0;
-        text-align: center;
-    }
-    
     .chart-container {
         position: relative;
         width: 250px;
@@ -243,15 +237,6 @@ document.addEventListener("DOMContentLoaded", function() {
     #goalValue {
         text-align: right;
         display: block;
-    }
-    button {
-        background-color: #337ab7;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
     }
 
     #unit {

@@ -34,23 +34,47 @@
     h3 {
         margin: 15px 0 20px;
     }
+    #selectedDateDisplay {
+        background-color: #f2f2f2;
+    }
+    .noData {
+        display: flex;
+        justify-content: center;
+    }
+    .selectDate {
+        display: flex;
+        justify-content: center;
+        background-color: #f2f2f2;
+        margin-top: 10px;
+        max-width: 600px;
+    }
+
+
 </style>
-<h1>過去1週間の記録</h1>
+<div class="content-header">
+    <a href="{% url 'dashboard' %}" class="back-button">
+        <span class="back-arrow">←</span>
+    </a>
+    <h1 class="title">過去1週間の記録</h1>
+</div>
 
 <!-- ① 直近1週間の水分摂取量 -->
 <div class="container">
     <h3>過去1週間の水分摂取</h3>
     <canvas id="weeklyChart"></canvas>
 </div>
-
-<p id="selectedDateDisplay" style="text-align: center; font-size: 18px; font-weight: bold;"></p>
+<div class="container selectDate">
+    <p id="selectedDateDisplay" style="text-align: center; font-size: 18px; font-weight: bold;"></p>
+</div>
+<div class="noData">
+    <p id="noDataMessage" style="display: none; color: red; text-align: center;">データがありません</p>
+</div>
 
 <!-- ② 選択日の栄養素摂取量 -->
 <div id="nutritionContainer" class="container">
     <h3>栄養素の摂取量</h3>
     <canvas id="nutritionChart"></canvas>
 </div>
-<p id="noDataMessage" style="display: none; color: red; text-align: center;">データがありません</p>
 
 <!-- ③ 選択日の飲んだ記録 -->
 <div class="container" id = "tablecont">

@@ -2,31 +2,6 @@
 {% block content %}
 
 <style>
-    /* 新規登録の文字を中央配置 */
-    .form-header {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 20px;
-        width: 100%;
-        position: relative;
-    }
-    /* 戻るボタンのスタイル */
-    .back-button {
-        position: absolute;
-        left: 20px; /* メールアドレスと同じ横軸に配置 */
-        top: 5px; /* 新規登録と同じ縦軸に配置 */
-        font-size: 22px; /* 矢印を少し太く */
-        cursor: pointer;
-        color: gray; /* 矢印の色を灰色に */
-        text-decoration: none;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
 
     /* フォーム自体のスタイル */
     .form-container {
@@ -89,11 +64,11 @@
     }
 </style>
 
-<div class="form-header">
+<div class="content-header">
     <a href="{% url 'dashboard' %}" class="back-button">
         <span class="back-arrow">←</span>
     </a>
-    マイページ
+    <h1 class="title">マイページ</h1>
 </div>
 
 <div class="container">
