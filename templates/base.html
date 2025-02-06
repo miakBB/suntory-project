@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}アクアlife{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ STATIC_VERSION }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+<header>
+    アクアlife
+</header>
+<main>
+{% block content %}{% endblock %}
+</main>
+
+{% if request.resolver_match.url_name not in "login,register" %}
+<footer>
+    <nav>
+        <a href="{% url 'dashboard' %}"><i class="fa-solid fa-house"></i></a>
+        <a href="{% url 'create_record' %}"><i class="fa-solid fa-pen"></i></a>
+        <a href="{% url 'list_records' %}"><i class="fa-solid fa-chart-bar"></i></a>
+        <a href="{% url 'update' %}"><i class="fa-solid fa-user"></i></a>
+    </nav>
+</footer>
+{% endif %}
+</body>
+</html>
+
+

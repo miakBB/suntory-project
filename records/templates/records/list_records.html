@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    #tableContainer {
+        display: flex;
+        justify-content: center; /* テーブルを中央に配置 */
+    }
+    
+    #detailTable {
+        width: 100%; /* テーブルの幅を調整 */
+        border-collapse: collapse; /* 枠線を統一 */
+        text-align: center; /* 中央揃え */
+    }
+    
+    #detailTable th, #detailTable td {
+        border: 1px solid black; /* 枠線を追加 */
+        padding: 10px;
+    }
+    
+    #detailTable th {
+        background-color: #f2f2f2; /* ヘッダーの背景色 */
+    }
+    
+    #detailTable td:nth-child(2),
+    #detailTable td:nth-child(3),
+    #detailTable td:nth-child(4),
+    #detailTable td:nth-child(5) {
+        width: 15%; /* 各カラムの幅を均一に設定 */
+    }
+    
+    #detailTable td:nth-child(1) {
+        width: 40%; /* 飲み物の名前のカラムを広めに */
+    }
+    h3 {
+        margin: 15px 0 20px;
+    }
+    #selectedDateDisplay {
+        background-color: #f2f2f2;
+    }
+    .noData {
+        display: flex;
+        justify-content: center;
+    }
+    .selectDate {
+        display: flex;
+        justify-content: center;
+        background-color: #f2f2f2;
+        margin-top: 10px;
+        max-width: 600px;
+    }
+
+
+</style>
+<div class="content-header">
+    <a href="{% url 'dashboard' %}" class="back-button">
+        <span class="back-arrow">←</span>
+    </a>
+    <h1 class="title">過去1週間の記録</h1>
+</div>
+
+<!-- ① 直近1週間の水分摂取量 -->
+<div class="container">
+    <h3>過去1週間の水分摂取</h3>
+    <canvas id="weeklyChart"></canvas>
+</div>
+<div class="container selectDate">
+    <p id="selectedDateDisplay" style="text-align: center; font-size: 18px; font-weight: bold;"></p>
+</div>
+<div class="noData">
+    <p id="noDataMessage" style="display: none; color: red; text-align: center;">データがありません</p>
+</div>
+
+<!-- ② 選択日の栄養素摂取量 -->
+<div id="nutritionContainer" class="container">
+    <h3>栄養素の摂取量</h3>
+    <canvas id="nutritionChart"></canvas>
+</div>
+
+<!-- ③ 選択日の飲んだ記録 -->
+<div class="container" id = "tablecont">
+    <h3>飲み物一覧</h3>
+    <div id="tableContainer">
+        <table id="detailTable">
+            <thead>
+                <tr>
+                    <th>飲み物</th>
+                    <th>量</th>
+                    <th>カロリー</th>
+                    <th>カフェイン</th>
+                    <th>糖分</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!--<p id="noDataMessageDetail" style="display: none; color: red; text-align: center;">データがありません</p>-->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch("/records/api/weekly/")
+            .then(response => response.json())
+            .then(data => {
+                console.log("APIレスポンス:", data); // ✅ デバッグ用
+                let requiredWater = data.required_water;
+                let originalDates = data.weekly_data.map(entry => entry.date).reverse();
+                let labels = originalDates.map(date => date.slice(5));
+                let quantities = data.weekly_data.map(entry => entry.total).reverse();
+                let selectedDate = originalDates[6];
+    
+                const ctx = document.getElementById("weeklyChart").getContext("2d");
+                const weeklyChart = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: "水分摂取量(ml)",
+                            data: quantities,
+                            backgroundColor: "#84D3E2"
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: { 
+                                beginAtZero: true,  // 0から始める
+                                //grid: { display: false },  // ✅ X軸のグリッドを非表示
+                            },
+                            y: {
+                                beginAtZero: true,
+                                suggestedMax: Math.max(...quantities, requiredWater) * 1.1,
+                                grid: { display: false },
+                                beginAtZero: true,
+                                ticks: { display: false }, // ✅ Y軸の数値を非表示
+                                border: { display: false },
+                            }
+                        },
+                        onClick: function(event, elements) {
+                            let index = elements.length > 0 ? elements[0].index : getClosestIndex(event);
+                            if (index !== null) {
+                                selectedDate = originalDates[index];
+                                console.log(`選択された日付: ${selectedDate}`); // ✅ デバッグ用
+                                updateNutritionChart(selectedDate);
+                                updateDetailTable(selectedDate);
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },  // 凡例を非表示
+                            tooltip: {
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        let label = tooltipItem.dataset.label || '';
+                                        let value = tooltipItem.raw;
+                                        let unit = "ml";  // 各データの単位
+                                        return `${value} ${unit}`;
+                                    }
+                                }
+                            },
+                            annotation: {
+                                annotations: {
+                                    requiredWaterLine: {
+                                        type: "line",
+                                        yMin: requiredWater,
+                                        yMax: requiredWater,
+                                        borderColor: "red",
+                                        borderWidth: 2,
+                                        borderDash: [5, 5],
+                                        label: {
+                                            enabled: true,
+                                            content: "目標水分量",
+                                            position: "end"
+                                        }
+                                    }
+                                }
+                            },
+                        }
+                    }
+                });
+
+                function updateSelectedDateDisplay(date) {
+                    document.getElementById("selectedDateDisplay").textContent = `選択日: ${date}`;
+                }
+
+                function getClosestIndex(event) {
+                    let chart = weeklyChart;
+                    let chartArea = chart.chartArea;
+                    let x = event.x; // クリックした座標のX値
+                    let minDiff = Infinity;
+                    let closestIndex = null;
+                
+                    chart.data.labels.forEach((label, i) => {
+                        let meta = chart.getDatasetMeta(0);
+                        let bar = meta.data[i];
+                
+                        if (bar) {
+                            let diff = Math.abs(bar.x - x);
+                            if (diff < minDiff) {
+                                minDiff = diff;
+                                closestIndex = i;
+                            }
+                        }
+                    });
+                
+                    return closestIndex;
+                }
+    
+                // 初期データをセット
+                updateNutritionChart(selectedDate);
+                updateDetailTable(selectedDate);
+    
+                function updateNutritionChart(date) {
+                    updateSelectedDateDisplay(date);  // 選択日を表示
+                    let ctx = document.getElementById("nutritionChart").getContext("2d");
+                
+                    // 既存のグラフがある場合は削除
+                    if (window.nutritionChart instanceof Chart) {
+                        window.nutritionChart.destroy();
+                    }
+                
+                    let nutritionData = data.nutrition[date] || { kcal: 0, caffeine: 0, sugars: 0 };
+                    let maxValue = Math.max(nutritionData.kcal, nutritionData.sugars, nutritionData.caffeine, 1);
+                
+                    const nutritionContainer = document.getElementById("nutritionContainer");
+                    const noDataMessage = document.getElementById("noDataMessage");
+                
+                    if (nutritionData.kcal === 0 && nutritionData.caffeine === 0 && nutritionData.sugars === 0) {
+                        nutritionContainer.style.display = "none";
+                        noDataMessage.style.display = "block";
+                    } else {
+                        nutritionContainer.style.display = "block";
+                        noDataMessage.style.display = "none";
+                
+                        window.nutritionChart = new Chart(ctx, {
+                            type: "bar",
+                            data: {
+                                labels: ["カロリー", "糖分", "カフェイン"],
+                                datasets: [{
+                                    data: [nutritionData.kcal, nutritionData.sugars, nutritionData.caffeine],
+                                    backgroundColor: ["hsl(359, 61%, 73%)", "hsl(311, 61%, 73%)", "hsl(128, 61%, 73%)"]
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+                                        suggestedMax: maxValue * 1.2,
+                                        border: { display: false },
+                                        ticks: { display: false },
+                                        grid: { display: false },
+
+                                    }
+                                },
+                                plugins: {
+                                    legend: { display: false },
+                                    tooltip: {
+                                        displayColors: false,
+                                        callbacks: {
+                                            label: function(tooltipItem) {
+                                                let label = tooltipItem.dataset.label || '';
+                                                let value = parseFloat(tooltipItem.raw.toFixed(2)).toString();
+                                                let unit = ['kcal', 'g', 'mg'][tooltipItem.dataIndex];
+                                                return `${value} ${unit}`;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                
+                function updateDetailTable(date) {
+                    const tableContainer = document.getElementById("tablecont");
+                    const tableBody = document.querySelector("#detailTable tbody");
+                    //const noDataMessage = document.getElementById("noDataMessageDetail");
+                
+                    let detailsData = data.details[date] || [];
+                    tableBody.innerHTML = "";
+                
+                    if (detailsData.length > 0) {
+                        detailsData.forEach(entry => {
+                            tableBody.innerHTML += `<tr>
+                                <td>${entry.drink_name}</td>
+                                <td>${entry.quantity}ml</td>
+                                <td>${entry.kcal}kcal</td>
+                                <td>${entry.caffeine}mg</td>
+                                <td>${entry.sugars}g</td>
+                            </tr>`;
+                        });
+                
+                        tableContainer.style.display = "block";
+                        //noDataMessage.style.display = "none";
+                    } else {
+                        tableContainer.style.display = "none";
+                        //noDataMessage.style.display = "block";
+                    }
+                }
+            })
+            .catch(error => console.error("データ取得エラー:", error));
+    });
+</script>
+    
+    
+{% endblock %}

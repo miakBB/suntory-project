@@ -1,0 +1,5 @@
+ダミー
+想定フォルダ使用例
+/resource
+ /icons
+ /img
