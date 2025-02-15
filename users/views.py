@@ -42,27 +42,54 @@ def register(request):
 
     return render(request, 'register.html', {'form': form, 'backend_errors': backend_errors})
 
+#ユーザー情報更新
+"""
 @login_required
 def update(request):
     user = request.user
+    success = False  # 更新成功フラグ
+    backend_errors = None  # エラーメッセージ
+
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST)
+        form = UserUpdateForm(request.POST, instance=user)
         if form.is_valid():
-            #ユーザー情報更新
-            user.email = form.cleaned_data.get('email')
-            user.birth_date = form.cleaned_data.get('birth_date')
-            user.gender = form.cleaned_data.get('gender')     
-            user.weight = form.cleaned_data.get('weight')
-            user.save()
-            return redirect('update') #マイページへリダイレクト
+            try:
+                form.save()
+                success = True  # 更新成功
+            except Exception as e:
+                backend_errors = str(e)  # 予期しないエラー
+        else:
+            backend_errors = form.errors.as_json()  # バリデーションエラー
+
     else:
-        #ユーザーデータをフォームにセット
-        data = {
-            'username':user.username,
-            'email':user.email,
-            'birth_date':user.birth_date,
-            'gender':user.gender,
-            'weight':user.weight,
-        }
-        form = UserUpdateForm(data)
-    return render(request,'update.html',{'form':form}) 
+        form = UserUpdateForm(instance=user)
+
+    return render(request, 'update.html', {'form': form, 'success': success, 'backend_errors': backend_errors})
+"""
+
+from django.http import JsonResponse
+
+@login_required
+def update(request):
+    user = request.user
+    success = False  
+    backend_errors = None
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            try:
+                form.save()
+                success = True
+            except Exception as e:
+                backend_errors = str(e)
+        else:
+            backend_errors = form.errors.as_json()
+
+        # AJAX の場合は JSON を返す
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': success, 'errors': backend_errors})
+    else:
+        form = UserUpdateForm(instance=user)
+
+    return render(request, 'update.html', {'form': form, 'success': success, 'backend_errors': backend_errors})

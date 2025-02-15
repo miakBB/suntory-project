@@ -26,7 +26,7 @@ class User(AbstractUser):
     # 新規追加フィールド
     birth_date = models.DateField(default="1900-01-01", blank=True)  # 生年月日（未入力時は 1900-01-01）
     gender = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(9)])  # 性別（1〜9 の範囲で制限）
-    weight = models.FloatField()  # 体重（浮動小数点 少数第一位まで想定)
+    weight = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(200)])  # 体重（整数 1〜200 の範囲で制限）
 
     # メールアドレスをログインIDとして使用する
     USERNAME_FIELD = 'email'
