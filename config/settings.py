@@ -27,7 +27,7 @@ load_dotenv()
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "default-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 #DEBUG = os.getenv("DEBUG", "True") == "True"s
 
 ALLOWED_HOSTS = ["*"]
@@ -96,18 +96,18 @@ AUTH_USER_MODEL = "users.User"
 #パスワードの禁止事項(現在デフォルト)
 
 AUTH_PASSWORD_VALIDATORS = [ 
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', #ユーザーと似たパスワード禁止
-    },
+    #{
+    #    'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', #ユーザーと似たパスワード禁止
+    #},
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', #最小文字数指定
     },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', #一般的なパスワード禁止
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', #数字のみのパスワード禁止
-    },
+    #{
+    #    'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', #一般的なパスワード禁止
+    #},
+    #{
+    #    'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', #数字のみのパスワード禁止
+    #},
 ]
 
 
@@ -132,13 +132,12 @@ USE_TZ = True
 
 STATIC_URL = "/static/" #静的ファイルのディレクトリ指定(プロジェクト直下)
 
-STATICFILES_DIRS = (
-    [
-        os.path.join(BASE_DIR, "static"), 
-    ]
-)
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR / "staticfiles" 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_VERSION = "1.0"

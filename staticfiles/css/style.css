@@ -1,0 +1,130 @@
+html, body {
+    height: 100%; /* 必要な高さを100%に設定 */
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgba(224, 251, 255, 1); /* 背景色を変更 */
+    display: flex;
+    flex-direction: column; /* フレックスボックスを使用してレイアウトを管理 */
+}
+
+header {
+    background-color: #83D3E2;
+    color: white;
+    padding: 10px 0;
+    font-size: 27px;
+    text-align: center;
+    display: inline-block; /* 文字の幅だけに背景色を適用 */
+    position: fixed;
+    width: 100%;
+    z-index: 1000; /* 他の要素より上に表示されるように */
+}
+
+main {
+    flex: 1; /* メイン部分が残りのスペースを埋めるように */
+    padding: 20px;
+    padding-top: 60px; /* ヘッダーの高さ分の余白 */
+    padding-bottom: 70px; /* フッターの高さ分の余白を追加 */
+}
+
+.content-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    width: 100%;
+    position: relative;
+}
+
+.back-button {
+    position: absolute;
+    left: 20px; /* メールアドレスと同じ横軸に配置 */
+    top: 5px; /* 新規登録と同じ縦軸に配置 */
+    font-size: 22px; /* 矢印を少し太く */
+    cursor: pointer;
+    color: gray; /* 矢印の色を灰色に */
+    text-decoration: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.title {
+    text-align: center;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    width: 215px;
+    height: 30px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    line-height: 12px;
+    margin: auto;
+    display: block;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+
+footer {
+    height: 45px; /* 高さを少し小さく */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-top: 2px solid #000;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 5px 0; /* 上下の余白を減らす */
+}
+
+footer nav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    max-width: 400px; /* 幅を制限して中央寄せに */
+    margin: 0 auto;
+}
+
+footer nav a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px; /* アイコンを少し小さく */
+    color: black;
+    text-decoration: none;
+    width: 40px; /* クリックエリアを確保 */
+    height: 40px;
+}
+
+footer nav a:hover {
+    color: gray;
+}
+
+footer nav a i {
+    font-size: 18px; /* アイコンサイズをさらに小さく */
+}
