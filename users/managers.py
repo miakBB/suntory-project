@@ -27,6 +27,9 @@ class UserManager(BaseUserManager):
         if extra_fields["weight"] <= 0:
             raise ValueError("weight は 0 以上である必要があります")
 
+        if not username.strip():
+            username = "名無しさん"  # デフォルト値をセット
+
         user = self.model(username=username, email=email, **extra_fields)
         user.set_password(password)  # パスワードをハッシュ化
         user.save(using=self._db)

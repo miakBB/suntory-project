@@ -15,15 +15,10 @@ header {
     background-color: #83D3E2;
     color: white;
     padding: 10px 0;
-    font-size: 20px;
+    font-size: 27px;
     text-align: center;
     display: inline-block; /* 文字の幅だけに背景色を適用 */
-    margin-left: auto;
-    margin-right: auto;
-    width: auto; /* 幅を自動調整 */
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     z-index: 1000; /* 他の要素より上に表示されるように */
 }
@@ -32,10 +27,8 @@ main {
     flex: 1; /* メイン部分が残りのスペースを埋めるように */
     padding: 20px;
     padding-top: 60px; /* ヘッダーの高さ分の余白 */
-    padding-bottom: 50px; /* フッターの高さ分の余白 */
+    padding-bottom: 70px; /* フッターの高さ分の余白を追加 */
 }
-
-
 
 .content-header {
     display: flex;

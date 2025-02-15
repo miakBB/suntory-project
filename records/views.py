@@ -68,8 +68,8 @@ def calculate_required_water(user):
     else:
         water_per_kg = 35
 
-    # 必要水分量の計算（60%が飲料から）
-    required_water = user.weight * water_per_kg * 0.6
+    # 必要水分量の計算（80%が飲料から）
+    required_water = user.weight * water_per_kg * 0.8
     return round(required_water, 1)
 
 @login_required
